@@ -1,2 +1,10 @@
-# Program_Concurrente_TPS
-Repositorio destinado para la realización de los Trabajos Practicos de la materia Progamación Concurrente. FCEFYN - UNC
+# Progamacion Concurrente - TPs
+
+Trabajos Practicos grupales realizados para la materia Programación Concurrente
+
+## Grupo: ***Breaking Threads***
+- Palacio, Luis Enrique
+- Rodriguez, Mateo
+- Saillen, Simón
+- Trachta, Agustin
+- Vargas, Rodrigo

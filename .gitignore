@@ -1,4 +1,5 @@
 # Directories
+out/
 .idea/
 ./TP1/.idea/
 *.iml

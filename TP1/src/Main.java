@@ -5,5 +5,7 @@ public class Main {
         System.out.println("Hola Mundo");
         int a = 5;
         System.out.println(a);
+        int b = 7;
+        System.out.println(b+a);
     }
 }

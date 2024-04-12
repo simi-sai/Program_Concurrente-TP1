@@ -1,11 +1,17 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.util.Arrays;
+import Tareas.Reserva;
+import Tareas.Validacion;
+import Tareas.Pagos;
+import Tareas.Cancelacion;
+
 public class Main {
   public static void main(String[] args) {
-    System.out.println("Hola Mundo");
-    int a = 5;
-    System.out.println(a);
-    int b = 7;
-    System.out.println(b + a);
+    // 186 pasajeros = 31 filas y 6 columnas
+    Integer[][] Asientos = new Integer[31][6];
+
+    Reserva r = new Reserva();
+    Validacion v = new Validacion();
+    Pagos p = new Pagos();
+    Cancelacion c = new Cancelacion();
   }
 }

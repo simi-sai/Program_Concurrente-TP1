@@ -6,26 +6,58 @@ import java.util.Random;
 
 public class EtapaReserva {
   private Asiento[][] asientos = new Asiento[31][6];
-  private Registros registros = new Registros(); // Initialize here directly
+  private Registros registros;
 
-  // This class represents a thread that can reserve a seat
+  public EtapaReserva(Registros registros) {
+    this.registros = registros;
+  }
+
   private class ThreadReserva implements Runnable {
+    /**
+     * Implementation of the run method for the ThreadReserva class.
+     * This method runs in a loop, attempting to reserve random seats until all
+     * seats are reserved.
+     */
     @Override
     public void run() {
-      // Get a random Asiento object from the array
+      // Create a random object for generating random numbers
       Random random = new Random();
-      int randomRow = random.nextInt(31);
-      int randomColumn = random.nextInt(6);
-      Asiento randomAsiento = asientos[randomRow][randomColumn];
-      while (randomAsiento.getEstado() != 0) {
-        randomRow = random.nextInt(31);
-        randomColumn = random.nextInt(6);
-        randomAsiento = asientos[randomRow][randomColumn];
+      // Loop indefinitely
+      while (true) {
+        // Generate random row and column within the array bounds
+        int randomRow = random.nextInt(31);
+        int randomColumn = random.nextInt(6);
+        // Get the random Asiento object
+        Asiento randomAsiento = asientos[randomRow][randomColumn];
+        // Synchronize on the randomAsiento to avoid conflicts with other threads
+        synchronized (randomAsiento) {
+          // Check if the seat is free (estado == 0)
+          if (randomAsiento.getEstado() == 0) {
+            // Reserve the seat
+            randomAsiento.reservar();
+            // If registros is not null, register the reservation
+            if (registros != null) {
+              registros.registrar_reserva(0, randomAsiento);
+            }
+          }
+        }
+        // Check if all seats are reserved
+        if (allSeatsReserved()) {
+          // Exit the loop if all seats are reserved
+          break;
+        }
       }
-      randomAsiento.reservar();
-      if (registros != null) { // Check if registros is not null
-        registros.registrar_reserva(0, randomAsiento);
+    }
+
+    private boolean allSeatsReserved() {
+      for (int i = 0; i < 31; i++) {
+        for (int j = 0; j < 6; j++) {
+          if (asientos[i][j].getEstado() == 0) {
+            return false; // At least one seat is not reserved
+          }
+        }
       }
+      return true; // All seats are reserved
     }
   }
 

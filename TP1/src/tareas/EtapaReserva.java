@@ -32,7 +32,7 @@ public class EtapaReserva {
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           // Check if the seat is free (estado == 0)
-          if (randomAsiento.getEstado() == 0) {
+          if (randomAsiento.getEstadoReserva() == 0) {
             // Reserve the seat
             randomAsiento.reservar();
             // If registros is not null, register the reservation
@@ -52,7 +52,7 @@ public class EtapaReserva {
     private boolean allSeatsReserved() {
       for (int i = 0; i < 31; i++) {
         for (int j = 0; j < 6; j++) {
-          if (asientos[i][j].getEstado() == 0) {
+          if (asientos[i][j].getEstadoReserva() == 0) {
             return false; // At least one seat is not reserved
           }
         }

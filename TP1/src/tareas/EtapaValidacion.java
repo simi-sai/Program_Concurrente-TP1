@@ -30,15 +30,18 @@ public class EtapaValidacion {
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           if (randomNumber < 90) {
-            // Mark the reservation as checked
-            randomAsiento.setChecked();
+            if (randomAsiento.getEstadoReserva() == 2) {
+              // Mark the reservation as checked
+              randomAsiento.setChecked();
+            }
           } else {
             // Cancel the reservation: Set the seat as discarded, add to the canceled
             // reservations list, and remove from confirmed list
-            randomAsiento.setEstado(-1);
+            randomAsiento.cancelarReserva();
             registros.registrar_reserva(1, randomAsiento);
             registros.eliminar_reserva(2, randomAsiento);
           }
+
         }
       }
     }
@@ -50,4 +53,5 @@ public class EtapaValidacion {
     t1.start();
     t2.start();
   }
+
 }

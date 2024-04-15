@@ -41,4 +41,8 @@ public class Asiento {
   public void setChecked() {
     this.checked = 1;
   }
+
+  public int getChecked() {
+    return checked;
+  }
 }

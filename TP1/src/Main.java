@@ -1,17 +1,14 @@
-import java.util.Arrays;
-import Tareas.Reserva;
-import Tareas.Validacion;
-import Tareas.Pagos;
-import Tareas.Cancelacion;
+
+import tareas.EtapaReserva;
+import tareas.Registros;
+import tareas.EtapaPago;
 
 public class Main {
   public static void main(String[] args) {
-    // 186 pasajeros = 31 filas y 6 columnas
-    Integer[][] Asientos = new Integer[31][6];
-
-    Reserva r = new Reserva();
-    Validacion v = new Validacion();
-    Pagos p = new Pagos();
-    Cancelacion c = new Cancelacion();
+    Registros registros = new Registros();
+    EtapaReserva etapa = new EtapaReserva(registros);
+    EtapaPago etapa2 = new EtapaPago(registros);
+    etapa.ejecutarEtapa();
+    etapa2.ejecutarEtapa();
   }
 }

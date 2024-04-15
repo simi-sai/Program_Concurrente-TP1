@@ -34,12 +34,32 @@ public class Registros {
         break;
       case 1:
         reservas_canceladas.add(asiento);
+        System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
         break;
       case 2:
         reservas_confirmadas.add(asiento);
+        System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
         break;
       case 3:
         reservas_verificadas.add(asiento);
+        System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
+        break;
+    }
+  }
+
+  public void eliminar_reserva(int tipo, Asiento asiento) {
+    switch (tipo) {
+      case 0:
+        reservas_pendientes.remove(asiento);
+        break;
+      case 1:
+        reservas_canceladas.remove(asiento);
+        break;
+      case 2:
+        reservas_confirmadas.remove(asiento);
+        break;
+      case 3:
+        reservas_verificadas.remove(asiento);
         break;
     }
   }
@@ -51,20 +71,28 @@ public class Registros {
     Asiento asiento = null;
     switch (tipo) {
       case 0:
-        reserva = random.nextInt(reservas_pendientes.size());
-        asiento = reservas_pendientes.get(reserva);
+        if (!reservas_pendientes.isEmpty()) {
+          reserva = random.nextInt(reservas_pendientes.size());
+          asiento = reservas_pendientes.get(reserva);
+        }
         break;
       case 1:
-        reserva = random.nextInt(reservas_canceladas.size());
-        asiento = reservas_canceladas.get(reserva);
+        if (!reservas_canceladas.isEmpty()) {
+          reserva = random.nextInt(reservas_canceladas.size());
+          asiento = reservas_canceladas.get(reserva);
+        }
         break;
       case 2:
-        reserva = random.nextInt(reservas_confirmadas.size());
-        asiento = reservas_confirmadas.get(reserva);
+        if (!reservas_confirmadas.isEmpty()) {
+          reserva = random.nextInt(reservas_confirmadas.size());
+          asiento = reservas_confirmadas.get(reserva);
+        }
         break;
       case 3:
-        reserva = random.nextInt(reservas_verificadas.size());
-        asiento = reservas_verificadas.get(reserva);
+        if (!reservas_verificadas.isEmpty()) {
+          reserva = random.nextInt(reservas_verificadas.size());
+          asiento = reservas_verificadas.get(reserva);
+        }
         break;
     }
     return asiento;

@@ -5,6 +5,7 @@ public class Asiento {
   private int estado;
   private int fila;
   private int columna;
+  private int checked;
 
   // Constructor
   public Asiento(int f, int c) {
@@ -14,6 +15,7 @@ public class Asiento {
     this.estado = 0;
     this.fila = f;
     this.columna = c;
+    this.checked = 0;
   }
 
   public synchronized int getEstado() {
@@ -34,5 +36,9 @@ public class Asiento {
 
   public int getColumna() {
     return columna;
+  }
+
+  public void setChecked() {
+    this.checked = 1;
   }
 }

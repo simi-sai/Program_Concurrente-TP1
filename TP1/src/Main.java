@@ -11,5 +11,11 @@ public class Main {
     etapa2.ejecutarEtapa();
     etapa3.ejecutarEtapa();
     etapa4.ejecutarEtapa();
+
+    // Wait for all threads to finish and print the final state of the seats
+    registros.printPendientes();
+    registros.printConfirmadas();
+    registros.printCanceladas();
+    registros.printVerificadas();
   }
 }

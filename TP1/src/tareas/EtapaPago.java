@@ -1,7 +1,5 @@
 package tareas;
 
-import tareas.Asiento;
-import tareas.Registros;
 import java.util.Random;
 
 public class EtapaPago {

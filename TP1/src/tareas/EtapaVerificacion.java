@@ -1,8 +1,5 @@
 package tareas;
 
-import tareas.Registros;
-import java.util.Random;
-
 public class EtapaVerificacion {
   private Registros registros;
 

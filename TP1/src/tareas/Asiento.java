@@ -14,10 +14,7 @@ public class Asiento {
 
   // Constructor
   public Asiento(int f, int c) {
-    // 0: Libre
-    // 1: Ocupado
-    // -1: Descartado
-    this.estado = 0;
+    this.estado = 0;    // 0: Libre // 1: Ocupado // -1: Descartado
     this.fila = f;
     this.columna = c;
     this.checked = 0;

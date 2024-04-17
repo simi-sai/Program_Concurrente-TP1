@@ -5,8 +5,8 @@ import tareas.Asiento;
 import java.util.Random;
 
 public class EtapaReserva {
-  private Asiento[][] asientos = new Asiento[31][6];
   private Registros registros;
+  private static final int DURACION_ITERACION = 30; // 30 milliseconds (for now)
 
   public EtapaReserva(Registros registros) {
     this.registros = registros;
@@ -24,27 +24,36 @@ public class EtapaReserva {
       Random random = new Random();
       // Loop indefinitely
       while (true) {
+        if (allSeatsReserved()) {
+          try {
+            // Wait for a random amount of time before trying again
+            Thread.sleep(random.nextInt(1000)); // random wait-time up to 1 second
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          // Check if all seats are reserved and exit the loop if so
+          if (allSeatsReserved()) {
+            break;
+          }
+        }
         // Generate random row and column within the array bounds
         int randomRow = random.nextInt(31);
         int randomColumn = random.nextInt(6);
         // Get the random Asiento object
-        Asiento randomAsiento = asientos[randomRow][randomColumn];
+        Asiento randomAsiento = (registros.getMatriz())[randomRow][randomColumn];
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           // Check if the seat is free (estado == 0)
           if (randomAsiento.getEstadoReserva() == 0) {
             // Reserve the seat
             randomAsiento.reservar();
-            // If registros is not null, register the reservation
-            if (registros != null) {
-              registros.registrar_reserva(0, randomAsiento);
-            }
+            registros.registrar_reserva(0, randomAsiento);
           }
         }
-        // Check if all seats are reserved
-        if (allSeatsReserved()) {
-          // Exit the loop if all seats are reserved
-          break;
+        try {
+          Thread.sleep(DURACION_ITERACION); // The thread will sleep before attempting the next reservation
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
       }
     }
@@ -52,7 +61,7 @@ public class EtapaReserva {
     private boolean allSeatsReserved() {
       for (int i = 0; i < 31; i++) {
         for (int j = 0; j < 6; j++) {
-          if (asientos[i][j].getEstadoReserva() == 0) {
+          if ((registros.getMatriz())[i][j].getEstadoReserva() == 0) {
             return false; // At least one seat is not reserved
           }
         }
@@ -63,11 +72,6 @@ public class EtapaReserva {
 
   public void ejecutarEtapa() {
     // Initialize all seats
-    for (int i = 0; i < 31; i++) { // Loop through rows
-      for (int j = 0; j < 6; j++) { // Loop through columns
-        asientos[i][j] = new Asiento(i, j);
-      }
-    }
     Thread thread1 = new Thread(new ThreadReserva());
     Thread thread2 = new Thread(new ThreadReserva());
     Thread thread3 = new Thread(new ThreadReserva());

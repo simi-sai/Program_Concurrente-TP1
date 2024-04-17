@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
+  private static final int DURACION_ITERACION = 60;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -13,22 +14,35 @@ public class EtapaVerificacion {
   private class ThreadVerif implements Runnable {
     @Override
     public void run() {
-      // Create a random object for generating random numbers
-      // Loop indefinitely
+      Random random = new Random();
       while (true) {
-        // Takes a random reservation from the confirmed list
-        Asiento randomAsiento = registros.get_reserva(2);
-        // Exit the loop if there are no more confirmed reservations
-        if (randomAsiento == null) {
-          break;
+        if (registros.getConfirmadas_size() == 0) {
+          // Wait for a random amount of time before trying again
+          try {
+            Thread.sleep(random.nextInt(1000)); // Wait up to 1 second
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          // Exit the loop if there are no more confirmed reservations
+          if (registros.getConfirmadas_size() == 0) {
+            break;
+          }
         }
+        Asiento randomAsiento = registros.get_reserva(2);
+
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           if (randomAsiento.getChecked() == 1) {
+            // Perform the verification
             randomAsiento.verificarReserva();
             registros.registrar_reserva(3, randomAsiento);
             registros.eliminar_reserva(2, randomAsiento);
           }
+        }
+        try {
+          Thread.sleep(DURACION_ITERACION);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
       }
     }

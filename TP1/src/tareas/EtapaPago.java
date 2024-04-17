@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class EtapaPago {
   private Registros registros;
+  private static final int DURACION_ITERACION = 40; // 40 milisegundos
 
   public EtapaPago(Registros registros) {
     this.registros = registros;
@@ -20,12 +21,21 @@ public class EtapaPago {
       Random random = new Random();
       // Loop indefinitely
       while (true) {
+        if (registros.getPendientes_size() == 0) {
+          // Wait for a random amount of time before trying again
+          try {
+            Thread.sleep(random.nextInt(1000)); // Wait up to 1 second
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          // Check if there are still no pending reservations
+          if (registros.getPendientes_size() == 0) {
+            break;
+          }
+        }
         // Takes a random reservation from the pending list
         Asiento randomAsiento = registros.get_reserva(0);
         int randomNumber = random.nextInt(100);
-        if (randomAsiento == null) {
-          break;
-        }
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           if (randomAsiento.getEstadoReserva() == 1) {
@@ -40,6 +50,11 @@ public class EtapaPago {
               registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
             }
           }
+        }
+        try {
+          Thread.sleep(DURACION_ITERACION);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
       }
     }

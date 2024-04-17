@@ -28,14 +28,17 @@ public class EtapaPago {
         }
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
-          if (randomNumber < 90) {
-            // Aprobado
-            registros.registrar_reserva(2, randomAsiento); // Se agrega a la lista de reservas confirmadas
-            registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
-          } else {
-            randomAsiento.setEstado(-1); // Asiento descartado
-            registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
-            registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
+          if (randomAsiento.getEstadoReserva() == 1) {
+            if (randomNumber < 90) {
+              // Aprobado
+              randomAsiento.confirmarReserva();
+              registros.registrar_reserva(2, randomAsiento); // Se agrega a la lista de reservas confirmadas
+              registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
+            } else {
+              randomAsiento.cancelarReserva();
+              registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
+              registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
+            }
           }
         }
       }

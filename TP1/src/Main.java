@@ -7,9 +7,12 @@ public class Main {
     EtapaPago etapa2 = new EtapaPago(registros);
     EtapaValidacion etapa3 = new EtapaValidacion(registros);
     EtapaVerificacion etapa4 = new EtapaVerificacion(registros);
+    Estadistica stat = new Estadistica(registros);
+    Thread statThread = new Thread(stat);
     etapa1.ejecutarEtapa();
     etapa2.ejecutarEtapa();
     etapa3.ejecutarEtapa();
     etapa4.ejecutarEtapa();
+    statThread.start();
   }
 }

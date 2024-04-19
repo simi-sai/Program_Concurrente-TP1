@@ -175,4 +175,32 @@ public class Registros {
   public Asiento[][] getMatriz() {
     return matriz_asientos;
   }
+
+  public void printPendientes() {
+    System.out.println("Reservas pendientes: ");
+    for (Asiento asiento : reservas_pendientes) {
+      System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
+    }
+  }
+
+  public void printCanceladas() {
+    System.out.println("Reservas canceladas: ");
+    for (Asiento asiento : reservas_canceladas) {
+      System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
+    }
+  }
+
+    public void printConfirmadas() {
+        System.out.println("Reservas confirmadas: ");
+        for (Asiento asiento : reservas_confirmadas) {
+        System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
+        }
+    }
+
+    public void printVerificadas() {
+        System.out.println("Reservas verificadas: ");
+        for (Asiento asiento : reservas_verificadas) {
+        System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
+        }
+    }
 }

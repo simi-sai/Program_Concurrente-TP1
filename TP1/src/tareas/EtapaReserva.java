@@ -1,7 +1,5 @@
 package tareas;
 
-import tareas.Registros;
-import tareas.Asiento;
 import java.util.Random;
 
 public class EtapaReserva {

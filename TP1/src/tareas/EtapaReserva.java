@@ -1,12 +1,10 @@
 package tareas;
 
-import tareas.Registros;
-import tareas.Asiento;
 import java.util.Random;
 
 public class EtapaReserva {
   private Registros registros;
-  private static final int DURACION_ITERACION = 30; // 30 milliseconds (for now)
+  private static final int DURACION_ITERACION = 100; // 100 milliseconds (for now)
 
   public EtapaReserva(Registros registros) {
     this.registros = registros;
@@ -25,23 +23,15 @@ public class EtapaReserva {
       // Loop indefinitely
       while (true) {
         if (allSeatsReserved()) {
-          try {
-            // Wait for a random amount of time before trying again
-            Thread.sleep(random.nextInt(1000)); // random wait-time up to 1 second
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          // Check if all seats are reserved and exit the loop if so
-          if (allSeatsReserved()) {
-            break;
-          }
+          System.out.println("------------------ All seats are reserved. Exiting. -----------------");
+          System.out.flush();
+          break;
         }
         // Generate random row and column within the array bounds
         int randomRow = random.nextInt(31);
         int randomColumn = random.nextInt(6);
         // Get the random Asiento object
-        Asiento randomAsiento = (registros.getMatriz())[randomRow][randomColumn];
-        // Synchronize on the randomAsiento to avoid conflicts with other threads
+        Asiento randomAsiento = registros.getAsiento(randomRow, randomColumn);
         synchronized (randomAsiento) {
           // Check if the seat is free (estado == 0)
           if (randomAsiento.getEstadoReserva() == 0) {

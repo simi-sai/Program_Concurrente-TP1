@@ -24,15 +24,15 @@ public class Asiento {
     this.estadoReserva = EstadoReserva.DISPONIBLE;
   }
 
-  public synchronized int getEstado() {
+  public int getEstado() {
     return estado;
   }
 
-  public synchronized void setEstado(int estado) {
+  public void setEstado(int estado) {
     this.estado = estado;
   }
 
-  public synchronized void reservar() {
+  public void reservar() {
     setEstado(1);
     if (estadoReserva == EstadoReserva.DISPONIBLE) {
       estadoReserva = EstadoReserva.PENDIENTE;
@@ -47,27 +47,29 @@ public class Asiento {
     return columna;
   }
 
-  public synchronized void confirmarReserva() {
+  public void confirmarReserva() {
     if (estadoReserva == EstadoReserva.PENDIENTE) {
       estadoReserva = EstadoReserva.CONFIRMADA;
     }
   }
 
-  public synchronized void cancelarReserva() {
+  public void cancelarReserva() {
     setEstado(-1);
     if (estadoReserva == EstadoReserva.PENDIENTE || estadoReserva == EstadoReserva.CONFIRMADA) {
       estadoReserva = EstadoReserva.CANCELADA;
     }
   }
 
-  public synchronized void verificarReserva() {
+  public void verificarReserva() {
     if (estadoReserva == EstadoReserva.CONFIRMADA) {
       estadoReserva = EstadoReserva.VERIFICADA;
     }
   }
 
   public int getEstadoReserva() {
-    return estadoReserva.ordinal();
+    synchronized (this) {
+      return estadoReserva.ordinal();
+    }
   }
 
   public int getChecked() {

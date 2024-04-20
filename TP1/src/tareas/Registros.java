@@ -43,7 +43,6 @@ public class Registros {
     int reservaIndex;
     Asiento asiento = null;
     switch (tipo) {
-
       case 0:
         /*
          * lockPendientes is used as the monitor object for synchronization.
@@ -100,24 +99,28 @@ public class Registros {
         synchronized (lockPendientes) {
           reservas_pendientes.add(asiento);
           System.out.printf("Reserva pendiente id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
+          System.out.flush();
         }
         break;
       case 1:
         synchronized (lockCanceladas) {
           reservas_canceladas.add(asiento);
           System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
+          System.out.flush();
         }
         break;
       case 2:
         synchronized (lockConfirmadas) {
           reservas_confirmadas.add(asiento);
           System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
+          System.out.flush();
         }
         break;
       case 3:
         synchronized (lockVerificadas) {
           reservas_verificadas.add(asiento);
           System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
+          System.out.flush();
         }
         break;
     }
@@ -173,6 +176,12 @@ public class Registros {
   }
 
   public Asiento[][] getMatriz() {
-    return matriz_asientos;
+    synchronized (this) {
+      return matriz_asientos;
+    }
+  }
+
+  public Asiento getAsiento(int f, int c) {
+    return getMatriz()[f][c];
   }
 }

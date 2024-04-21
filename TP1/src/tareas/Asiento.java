@@ -14,7 +14,7 @@ public class Asiento {
 
   // Constructor
   public Asiento(int f, int c) {
-    this.estado = 0;    // 0: Libre // 1: Ocupado // -1: Descartado
+    this.estado = 0; // 0: Libre // 1: Ocupado // -1: Descartado
     this.fila = f;
     this.columna = c;
     this.checked = 0;
@@ -22,7 +22,9 @@ public class Asiento {
   }
 
   public int getEstado() {
-    return estado;
+    synchronized (this) {
+      return estado;
+    }
   }
 
   public void setEstado(int estado) {

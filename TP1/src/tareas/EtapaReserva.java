@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaReserva {
   private Registros registros;
-  private static final int DURACION_ITERACION = 100; // 100 milliseconds (for now)
+  private static final int DURACION_ITERACION = 300; // 500 milliseconds (for now)
 
   public EtapaReserva(Registros registros) {
     this.registros = registros;
@@ -20,6 +20,9 @@ public class EtapaReserva {
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
+      int randomRow;
+      int randomColumn;
+      Asiento randomAsiento;
       // Loop indefinitely
       while (true) {
         if (allSeatsReserved()) {
@@ -27,19 +30,19 @@ public class EtapaReserva {
           System.out.flush();
           break;
         }
-        // Generate random row and column within the array bounds
-        int randomRow = random.nextInt(31);
-        int randomColumn = random.nextInt(6);
-        // Get the random Asiento object
-        Asiento randomAsiento = registros.getAsiento(randomRow, randomColumn);
+        int n = 0;
+        do {
+          randomRow = random.nextInt(31);
+          randomColumn = random.nextInt(6);
+          randomAsiento = registros.getAsiento(randomRow, randomColumn);
+          n++;
+        } while (randomAsiento.getEstadoReserva() != 0 && n != 185);
+        // Reserve the random seat
         synchronized (randomAsiento) {
-          // Check if the seat is free (estado == 0)
-          if (randomAsiento.getEstadoReserva() == 0) {
-            // Reserve the seat
-            randomAsiento.reservar();
-            registros.registrar_reserva(0, randomAsiento);
-          }
+          randomAsiento.reservar();
+          registros.registrar_reserva(0, randomAsiento);
         }
+        // Sleep for a while
         try {
           Thread.sleep(DURACION_ITERACION); // The thread will sleep before attempting the next reservation
         } catch (InterruptedException e) {
@@ -51,13 +54,14 @@ public class EtapaReserva {
     private boolean allSeatsReserved() {
       for (int i = 0; i < 31; i++) {
         for (int j = 0; j < 6; j++) {
-          if ((registros.getMatriz())[i][j].getEstadoReserva() == 0) {
+          if ((registros.getAsiento(i, j).getEstado() == 0)) {
             return false; // At least one seat is not reserved
           }
         }
       }
       return true; // All seats are reserved
     }
+
   }
 
   public void ejecutarEtapa() {

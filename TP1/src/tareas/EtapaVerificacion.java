@@ -1,8 +1,10 @@
 package tareas;
 
+import java.util.Random;
+
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 100;
+  private static final int DURACION_ITERACION = 300;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -22,18 +24,22 @@ public class EtapaVerificacion {
           }
           // Exit the loop if there are no more confirmed reservations
           if (registros.getConfirmadas_size() == 0) {
+            System.out.println("--------- Thread VERIFICACION: finished ---------");
+            System.out.flush();
             break;
           }
         }
         Asiento randomAsiento = registros.get_reserva(2);
 
-        // Synchronize on the randomAsiento to avoid conflicts with other threads
-        synchronized (randomAsiento) {
-          if (randomAsiento.getChecked() == 1) {
-            // Perform the verification
-            randomAsiento.verificarReserva();
-            registros.registrar_reserva(3, randomAsiento);
-            registros.eliminar_reserva(2, randomAsiento);
+        if (randomAsiento != null) { // The randomAsiento will be null when there are no more confirmed reservations
+          // Synchronize on the randomAsiento to avoid conflicts with other threads
+          synchronized (randomAsiento) {
+            if (randomAsiento.getChecked() == 1) {
+              // Perform the verification
+              randomAsiento.verificarReserva();
+              registros.registrar_reserva(3, randomAsiento);
+              registros.eliminar_reserva(2, randomAsiento);
+            }
           }
         }
         try {

@@ -56,32 +56,32 @@ public class Registros {
             reservaIndex = random.nextInt(reservas_pendientes.size());
             asiento = reservas_pendientes.get(reservaIndex);
           }
+          break;
         }
-        break;
       case 1:
         synchronized (lockCanceladas) {
           if (!reservas_canceladas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_canceladas.size());
             asiento = reservas_canceladas.get(reservaIndex);
+            break;
           }
         }
-        break;
       case 2:
         synchronized (lockConfirmadas) {
           if (!reservas_confirmadas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_confirmadas.size());
             asiento = reservas_confirmadas.get(reservaIndex);
+            break;
           }
         }
-        break;
       case 3:
         synchronized (lockVerificadas) {
           if (!reservas_verificadas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_verificadas.size());
             asiento = reservas_verificadas.get(reservaIndex);
+            break;
           }
         }
-        break;
     }
     return asiento;
   }
@@ -98,31 +98,35 @@ public class Registros {
       case 0:
         synchronized (lockPendientes) {
           reservas_pendientes.add(asiento);
-          System.out.printf("Reserva pendiente id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
-          System.out.flush();
+          // System.out.printf("Reserva pendiente id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+          break;
         }
-        break;
       case 1:
         synchronized (lockCanceladas) {
           reservas_canceladas.add(asiento);
-          System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
-          System.out.flush();
+          // System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+          break;
         }
-        break;
       case 2:
         synchronized (lockConfirmadas) {
           reservas_confirmadas.add(asiento);
-          System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
-          System.out.flush();
+          // System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+          break;
         }
-        break;
       case 3:
         synchronized (lockVerificadas) {
           reservas_verificadas.add(asiento);
-          System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(), asiento.getFila());
-          System.out.flush();
+          // System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+          break;
         }
-        break;
     }
   }
 
@@ -131,23 +135,23 @@ public class Registros {
       case 0:
         synchronized (lockPendientes) {
           reservas_pendientes.remove(asiento);
+          break;
         }
-        break;
       case 1:
         synchronized (lockCanceladas) {
           reservas_canceladas.remove(asiento);
+          break;
         }
-        break;
       case 2:
         synchronized (lockConfirmadas) {
           reservas_confirmadas.remove(asiento);
+          break;
         }
-        break;
       case 3:
         synchronized (lockVerificadas) {
           reservas_verificadas.remove(asiento);
+          break;
         }
-        break;
     }
   }
 
@@ -175,41 +179,11 @@ public class Registros {
     }
   }
 
-  public Asiento[][] getMatriz() {
-    synchronized (this) {
-      return matriz_asientos;
-    }
-  }
-
   public Asiento getAsiento(int f, int c) {
-    return getMatriz()[f][c];
-  }
-
-  public void printPendientes() {
-    System.out.println("Reservas pendientes: ");
-    for (Asiento asiento : reservas_pendientes) {
-      System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
+    synchronized (matriz_asientos) {
+      Asiento asiento = matriz_asientos[f][c];
+      return asiento;
     }
   }
 
-  public void printCanceladas() {
-    System.out.println("Reservas canceladas: ");
-    for (Asiento asiento : reservas_canceladas) {
-      System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
-    }
-  }
-
-    public void printConfirmadas() {
-        System.out.println("Reservas confirmadas: ");
-        for (Asiento asiento : reservas_confirmadas) {
-        System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
-        }
-    }
-
-    public void printVerificadas() {
-        System.out.println("Reservas verificadas: ");
-        for (Asiento asiento : reservas_verificadas) {
-        System.out.printf("[%d:%d] ", asiento.getColumna(), asiento.getFila());
-        }
-    }
 }

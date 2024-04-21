@@ -16,6 +16,7 @@ public class Estadistica implements Runnable {
   @Override
   public void run() {
     int totalVerif, totalCanceladas, totalReservas;
+    int porcentajeVuelo = 0;
     while (true) {
       try {
         FileWriter fw = new FileWriter("statistics.txt", true); // Append to the file
@@ -23,6 +24,7 @@ public class Estadistica implements Runnable {
         totalVerif = registros.getVerificadas_size();
         totalCanceladas = registros.getCanceladas_size();
         totalReservas = totalVerif + totalCanceladas;
+        porcentajeVuelo = (totalVerif * 100) / 186;
         writer.printf("Reservations Verified: %d, Cancelled: %d, Total: %d\n",
             totalVerif, totalCanceladas,
             totalReservas);
@@ -33,7 +35,8 @@ public class Estadistica implements Runnable {
         e.printStackTrace();
       }
       if (allSeatsVerified()) {
-        System.out.println("The statistics are ready. The program will exit now");
+        System.out.println("The statistics are ready");
+        System.out.println("Percentage reservations: " + porcentajeVuelo + "%");
         System.out.flush();
         break;
       }

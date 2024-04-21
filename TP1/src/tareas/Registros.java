@@ -180,9 +180,8 @@ public class Registros {
   }
 
   public Asiento getAsiento(int f, int c) {
-    Asiento asiento = null;
-    synchronized (this) {
-      asiento = matriz_asientos[f][c];
+    synchronized (matriz_asientos) {
+      Asiento asiento = matriz_asientos[f][c];
       return asiento;
     }
   }

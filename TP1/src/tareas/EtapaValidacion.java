@@ -22,12 +22,14 @@ public class EtapaValidacion {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.sleep(random.nextInt(2000, 4000)); // 5 sg
+            Thread.sleep(random.nextInt(2000, 4000)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
           // Exit the loop if there are no more confirmed reservations
           if (registros.getConfirmadas_size() == 0) {
+            System.out.println("--------- Thread validacion: finished ---------");
+            System.out.flush();
             break;
           }
         }
@@ -36,16 +38,18 @@ public class EtapaValidacion {
         // Generate a random number between 0 and 99
         int randomNumber = random.nextInt(100);
         // Synchronize on the randomAsiento to avoid conflicts with other threads
-        synchronized (randomAsiento) {
-          if (randomNumber < 90) {
-            // Mark the reservation as checked
-            randomAsiento.setChecked();
-          } else {
-            // Cancel the reservation: Set the seat as discarded, add to the canceled
-            // reservations list, and remove from confirmed list
-            randomAsiento.cancelarReserva();
-            registros.registrar_reserva(1, randomAsiento);
-            registros.eliminar_reserva(2, randomAsiento);
+        if (randomAsiento != null) {
+          synchronized (randomAsiento) {
+            if (randomNumber < 90) {
+              // Mark the reservation as checked
+              randomAsiento.setChecked();
+            } else {
+              // Cancel the reservation: Set the seat as discarded, add to the canceled
+              // reservations list, and remove from confirmed list
+              randomAsiento.cancelarReserva();
+              registros.registrar_reserva(1, randomAsiento);
+              registros.eliminar_reserva(2, randomAsiento);
+            }
           }
         }
         try {

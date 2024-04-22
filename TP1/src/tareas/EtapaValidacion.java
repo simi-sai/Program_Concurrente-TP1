@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 200;
+  private static final int DURACION_ITERACION = 100;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
@@ -47,8 +47,8 @@ public class EtapaValidacion {
               // Cancel the reservation: Set the seat as discarded, add to the canceled
               // reservations list, and remove from confirmed list
               randomAsiento.cancelarReserva();
-              registros.registrar_reserva(1, randomAsiento);
               registros.eliminar_reserva(2, randomAsiento);
+              registros.registrar_reserva(1, randomAsiento);
             }
           }
         } else {

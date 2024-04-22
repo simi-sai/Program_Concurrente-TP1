@@ -37,8 +37,8 @@ public class EtapaVerificacion {
             if (randomAsiento.getChecked() == 1) {
               // Perform the verification
               randomAsiento.verificarReserva();
-              registros.registrar_reserva(3, randomAsiento);
               registros.eliminar_reserva(2, randomAsiento);
+              registros.registrar_reserva(3, randomAsiento);
             }
           }
         } else {

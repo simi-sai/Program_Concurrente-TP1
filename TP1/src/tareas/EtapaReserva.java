@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class EtapaReserva {
   private Registros registros;
-  private static final int DURACION_ITERACION = 300; // 500 milliseconds (for now)
+  private static final int DURACION_ITERACION = 400; // 500 milliseconds (for now)
   private AtomicInteger ASIENTOS_DISPONIBLES = new AtomicInteger(0);
 
   public EtapaReserva(Registros registros) {
@@ -43,9 +43,6 @@ public class EtapaReserva {
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
-        // if (ASIENTOS_DISPONIBLES.get() == 186) {
-        // break;
-        // }
       }
       System.out.println("------------------ All seats are reserved. Exiting. -----------------");
       System.out.flush();

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaPago {
   private Registros registros;
-  private static final int DURACION_ITERACION = 100; // 40 milisegundos
+  private static final int DURACION_ITERACION = 200; // 40 milisegundos
 
   public EtapaPago(Registros registros) {
     this.registros = registros;
@@ -46,6 +46,8 @@ public class EtapaPago {
             }
             registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
           }
+        } else {
+          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

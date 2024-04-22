@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 100;
+  private static final int DURACION_ITERACION = 200;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
@@ -22,7 +22,7 @@ public class EtapaValidacion {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.sleep(random.nextInt(2000, 4000)); // 2-4 sg
+            Thread.sleep(random.nextInt(1000, 3000)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -51,6 +51,8 @@ public class EtapaValidacion {
               registros.eliminar_reserva(2, randomAsiento);
             }
           }
+        } else {
+          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

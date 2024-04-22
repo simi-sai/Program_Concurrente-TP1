@@ -22,9 +22,7 @@ public class Asiento {
   }
 
   public int getEstado() {
-    synchronized (this) {
-      return estado;
-    }
+    return estado;
   }
 
   public void setEstado(int estado) {
@@ -66,9 +64,7 @@ public class Asiento {
   }
 
   public int getEstadoReserva() {
-    synchronized (this) {
-      return estadoReserva.ordinal();
-    }
+    return estadoReserva.ordinal();
   }
 
   public int getChecked() {

@@ -63,25 +63,28 @@ public class Registros {
           if (!reservas_canceladas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_canceladas.size());
             asiento = reservas_canceladas.get(reservaIndex);
-            break;
           }
+          break;
         }
       case 2:
         synchronized (lockConfirmadas) {
           if (!reservas_confirmadas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_confirmadas.size());
             asiento = reservas_confirmadas.get(reservaIndex);
-            break;
           }
+          break;
         }
       case 3:
         synchronized (lockVerificadas) {
           if (!reservas_verificadas.isEmpty()) {
             reservaIndex = random.nextInt(reservas_verificadas.size());
             asiento = reservas_verificadas.get(reservaIndex);
-            break;
           }
+          break;
         }
+      default:
+        // Handle unexpected tipo values
+        System.err.println("Invalid tipo value: " + tipo);
     }
     return asiento;
   }
@@ -181,8 +184,7 @@ public class Registros {
 
   public Asiento getAsiento(int f, int c) {
     synchronized (matriz_asientos) {
-      Asiento asiento = matriz_asientos[f][c];
-      return asiento;
+      return matriz_asientos[f][c];
     }
   }
 

@@ -1,10 +1,12 @@
 package tareas;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EtapaReserva {
   private Registros registros;
   private static final int DURACION_ITERACION = 300; // 500 milliseconds (for now)
+  private AtomicInteger ASIENTOS_DISPONIBLES = new AtomicInteger(0);
 
   public EtapaReserva(Registros registros) {
     this.registros = registros;
@@ -20,27 +22,20 @@ public class EtapaReserva {
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
-      int randomRow;
-      int randomColumn;
-      Asiento randomAsiento;
-      // Loop indefinitely
-      while (true) {
-        if (allSeatsReserved()) {
-          System.out.println("------------------ All seats are reserved. Exiting. -----------------");
-          System.out.flush();
-          break;
-        }
-        int n = 0;
+      while (ASIENTOS_DISPONIBLES.get() < 186) {
+        int randomRow;
+        int randomColumn;
+        Asiento randomAsiento;
         do {
+          // Reserve the random seat
           randomRow = random.nextInt(31);
           randomColumn = random.nextInt(6);
           randomAsiento = registros.getAsiento(randomRow, randomColumn);
-          n++;
-        } while (randomAsiento.getEstadoReserva() != 0 && n != 185);
-        // Reserve the random seat
+        } while (randomAsiento.getEstadoReserva() != 0);
         synchronized (randomAsiento) {
           randomAsiento.reservar();
           registros.registrar_reserva(0, randomAsiento);
+          ASIENTOS_DISPONIBLES.incrementAndGet();
         }
         // Sleep for a while
         try {
@@ -48,18 +43,12 @@ public class EtapaReserva {
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
+        // if (ASIENTOS_DISPONIBLES.get() == 186) {
+        // break;
+        // }
       }
-    }
-
-    private boolean allSeatsReserved() {
-      for (int i = 0; i < 31; i++) {
-        for (int j = 0; j < 6; j++) {
-          if ((registros.getAsiento(i, j).getEstado() == 0)) {
-            return false; // At least one seat is not reserved
-          }
-        }
-      }
-      return true; // All seats are reserved
+      System.out.println("------------------ All seats are reserved. Exiting. -----------------");
+      System.out.flush();
     }
 
   }

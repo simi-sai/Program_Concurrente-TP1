@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 300;
+  private static final int DURACION_ITERACION = 200;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -41,6 +41,8 @@ public class EtapaVerificacion {
               registros.eliminar_reserva(2, randomAsiento);
             }
           }
+        } else {
+          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

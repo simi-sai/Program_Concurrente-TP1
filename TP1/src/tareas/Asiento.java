@@ -5,23 +5,23 @@ public class Asiento {
   private int estado;
   private int fila;
   private int columna;
-  private int checked;
-  private EstadoReserva estadoReserva;
+  private boolean checked;
+  // private EstadoReserva estadoReserva;
 
-  private enum EstadoReserva {
-    DISPONIBLE, PENDIENTE, CONFIRMADA, CANCELADA, VERIFICADA;
-  }
+  // private enum EstadoReserva {
+  // DISPONIBLE, PENDIENTE, CONFIRMADA, CANCELADA, VERIFICADA;
+  // }
 
   // Constructor
   public Asiento(int f, int c) {
     this.estado = 0; // 0: Libre // 1: Ocupado // -1: Descartado
     this.fila = f;
     this.columna = c;
-    this.checked = 0;
-    this.estadoReserva = EstadoReserva.DISPONIBLE;
+    this.checked = false;
+    // this.estadoReserva = EstadoReserva.DISPONIBLE;
   }
 
-  public int getEstado() {
+  public synchronized int getEstado() {
     return estado;
   }
 
@@ -29,12 +29,12 @@ public class Asiento {
     this.estado = estado;
   }
 
-  public void reservar() {
-    setEstado(1);
-    if (estadoReserva == EstadoReserva.DISPONIBLE) {
-      estadoReserva = EstadoReserva.PENDIENTE;
-    }
-  }
+  // public void reservar() {
+  // if (estadoReserva == EstadoReserva.DISPONIBLE) {
+  // setEstado(1);
+  // estadoReserva = EstadoReserva.PENDIENTE;
+  // }
+  // }
 
   public int getFila() {
     return fila;
@@ -44,34 +44,35 @@ public class Asiento {
     return columna;
   }
 
-  public void confirmarReserva() {
-    if (estadoReserva == EstadoReserva.PENDIENTE) {
-      estadoReserva = EstadoReserva.CONFIRMADA;
-    }
-  }
+  // public void confirmarReserva() {
+  // if (estadoReserva == EstadoReserva.PENDIENTE) {
+  // estadoReserva = EstadoReserva.CONFIRMADA;
+  // }
+  // }
 
-  public void cancelarReserva() {
-    setEstado(-1);
-    if (estadoReserva == EstadoReserva.PENDIENTE || estadoReserva == EstadoReserva.CONFIRMADA) {
-      estadoReserva = EstadoReserva.CANCELADA;
-    }
-  }
+  // public void cancelarReserva() {
+  // if (estadoReserva == EstadoReserva.PENDIENTE || estadoReserva ==
+  // EstadoReserva.CONFIRMADA) {
+  // setEstado(-1);
+  // estadoReserva = EstadoReserva.CANCELADA;
+  // }
+  // }
 
-  public void verificarReserva() {
-    if (estadoReserva == EstadoReserva.CONFIRMADA) {
-      estadoReserva = EstadoReserva.VERIFICADA;
-    }
-  }
+  // public void verificarReserva() {
+  // if (estadoReserva == EstadoReserva.CONFIRMADA) {
+  // estadoReserva = EstadoReserva.VERIFICADA;
+  // }
+  // }
 
-  public int getEstadoReserva() {
-    return estadoReserva.ordinal();
-  }
+  // public int getEstadoReserva() {
+  // return estadoReserva.ordinal();
+  // }
 
-  public int getChecked() {
+  public boolean getChecked() {
     return checked;
   }
 
   public void setChecked() {
-    this.checked = 1;
+    this.checked = true;
   }
 }

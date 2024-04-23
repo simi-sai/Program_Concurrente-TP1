@@ -45,8 +45,7 @@ public class Registros {
     switch (tipo) {
       case 0:
         /*
-         * lockPendientes is used as the monitor object for synchronization.
-         * This means
+         * lockPendientes is used as the monitor object for synchronization. This means
          * that only one thread at a time can enter the synchronized block that
          * is
          * synchronized on lockPendientes.

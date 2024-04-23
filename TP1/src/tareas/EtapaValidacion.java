@@ -68,8 +68,10 @@ public class EtapaValidacion {
   public void ejecutarEtapa() {
     Thread t1 = new Thread(new ThreadValid());
     Thread t2 = new Thread(new ThreadValid());
+    Thread t3 = new Thread(new ThreadValid());
     t1.start();
     t2.start();
+    t3.start();
   }
 
 }

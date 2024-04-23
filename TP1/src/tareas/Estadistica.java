@@ -35,7 +35,7 @@ public class Estadistica implements Runnable {
       }
       if (allSeatsVerified()) {
         try {
-          Thread.sleep(5000);
+          Thread.sleep(4500);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

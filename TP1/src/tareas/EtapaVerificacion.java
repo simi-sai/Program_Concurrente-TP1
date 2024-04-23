@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 200;
+  private static final int DURACION_ITERACION = 150;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -36,8 +36,8 @@ public class EtapaVerificacion {
           synchronized (randomAsiento) {
             if (randomAsiento.getChecked() == 1) {
               // Perform the verification
-              randomAsiento.verificarReserva();
               registros.eliminar_reserva(2, randomAsiento);
+              randomAsiento.verificarReserva();
               registros.registrar_reserva(3, randomAsiento);
             }
           }

@@ -31,13 +31,12 @@ public class EtapaVerificacion {
         }
         Asiento randomAsiento = registros.get_reserva(2);
 
-        if (randomAsiento != null) { // The randomAsiento will be null when there are no more confirmed reservations
+        if (randomAsiento != null) { // The randomAsiento will be null when there
           // Synchronize on the randomAsiento to avoid conflicts with other threads
           synchronized (randomAsiento) {
             if (randomAsiento.getChecked() == true) {
               // Perform the verification
               registros.eliminar_reserva(2, randomAsiento);
-              // randomAsiento.verificarReserva();
               registros.registrar_reserva(3, randomAsiento);
             }
           }

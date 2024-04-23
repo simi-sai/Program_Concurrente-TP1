@@ -5,23 +5,15 @@ import java.util.Random;
 
 public class Registros {
   // Atributos
-  private ArrayList<Asiento> reservas_pendientes;
-  private ArrayList<Asiento> reservas_confirmadas;
-  private ArrayList<Asiento> reservas_canceladas;
-  private ArrayList<Asiento> reservas_verificadas;
-  private Asiento[][] matriz_asientos;
-  // private final Object lockPendientes = new Object();
-  // private final Object lockCanceladas = new Object();
-  // private final Object lockConfirmadas = new Object();
-  // private final Object lockVerificadas = new Object();
+  private static ArrayList<Asiento> reservas_pendientes = new ArrayList<>();
+  private static ArrayList<Asiento> reservas_confirmadas = new ArrayList<>();
+  private static ArrayList<Asiento> reservas_canceladas = new ArrayList<>();
+  private static ArrayList<Asiento> reservas_verificadas = new ArrayList<>();
+  private static Asiento[][] matriz_asientos = new Asiento[31][6];
+  private static Random random = new Random();
 
   // Constructor
   public Registros() {
-    reservas_pendientes = new ArrayList<Asiento>();
-    reservas_confirmadas = new ArrayList<Asiento>();
-    reservas_canceladas = new ArrayList<Asiento>();
-    reservas_verificadas = new ArrayList<Asiento>();
-    matriz_asientos = new Asiento[31][6]; // Initialize the array
     for (int i = 0; i < 31; i++) {
       for (int j = 0; j < 6; j++) {
         matriz_asientos[i][j] = new Asiento(i, j);
@@ -39,48 +31,41 @@ public class Registros {
    * @return The reservation seat retrieved
    */
   public synchronized Asiento get_reserva(int tipo) {
-    Random random = new Random();
     int reservaIndex;
     Asiento asiento = null;
     switch (tipo) {
       case 0:
-        /*
-         * lockPendientes is used as the monitor object for synchronization. This means
-         * that only one thread at a time can enter the synchronized block that
-         * is
-         * synchronized on lockPendientes.
-         */
-        // synchronized (lockPendientes) {
-        if (!reservas_pendientes.isEmpty()) {
-          reservaIndex = random.nextInt(reservas_pendientes.size());
-          asiento = reservas_pendientes.get(reservaIndex);
+        synchronized (reservas_pendientes) {
+          if (!reservas_pendientes.isEmpty()) {
+            reservaIndex = random.nextInt(reservas_pendientes.size());
+            asiento = reservas_pendientes.get(reservaIndex);
+          }
         }
         break;
-      // }
       case 1:
-        // synchronized (lockCanceladas) {
-        if (!reservas_canceladas.isEmpty()) {
-          reservaIndex = random.nextInt(reservas_canceladas.size());
-          asiento = reservas_canceladas.get(reservaIndex);
+        synchronized (reservas_canceladas) {
+          if (!reservas_canceladas.isEmpty()) {
+            reservaIndex = random.nextInt(reservas_canceladas.size());
+            asiento = reservas_canceladas.get(reservaIndex);
+          }
         }
         break;
-      // }
       case 2:
-        // synchronized (lockConfirmadas) {
-        if (!reservas_confirmadas.isEmpty()) {
-          reservaIndex = random.nextInt(reservas_confirmadas.size());
-          asiento = reservas_confirmadas.get(reservaIndex);
+        synchronized (reservas_confirmadas) {
+          if (!reservas_confirmadas.isEmpty()) {
+            reservaIndex = random.nextInt(reservas_confirmadas.size());
+            asiento = reservas_confirmadas.get(reservaIndex);
+          }
         }
         break;
-      // }
       case 3:
-        // synchronized (lockVerificadas) {
-        if (!reservas_verificadas.isEmpty()) {
-          reservaIndex = random.nextInt(reservas_verificadas.size());
-          asiento = reservas_verificadas.get(reservaIndex);
+        synchronized (reservas_verificadas) {
+          if (!reservas_verificadas.isEmpty()) {
+            reservaIndex = random.nextInt(reservas_verificadas.size());
+            asiento = reservas_verificadas.get(reservaIndex);
+          }
         }
         break;
-      // }
       default:
         // Handle unexpected tipo values
         System.err.println("Invalid tipo value: " + tipo);
@@ -98,128 +83,94 @@ public class Registros {
   public synchronized void registrar_reserva(int tipo, Asiento asiento) {
     switch (tipo) {
       case 0:
-        // synchronized (lockPendientes) {
-        reservas_pendientes.add(asiento);
-        System.out.printf("Reserva pendiente id: [%d:%d]\n", asiento.getColumna(),
-            asiento.getFila());
-        System.out.flush();
+        synchronized (reservas_pendientes) {
+          reservas_pendientes.add(asiento);
+          // System.out.printf("Reserva pendiente id: [%d:%d]\n", .getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+        }
         break;
-      // }
       case 1:
-        // synchronized (lockCanceladas) {
-        reservas_canceladas.add(asiento);
-        System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(),
-            asiento.getFila());
-        System.out.flush();
+        synchronized (reservas_canceladas) {
+          reservas_canceladas.add(asiento);
+          // System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+        }
         break;
-      // }
       case 2:
-        // synchronized (lockConfirmadas) {
-        reservas_confirmadas.add(asiento);
-        System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(),
-            asiento.getFila());
-        System.out.flush();
+        synchronized (reservas_confirmadas) {
+          reservas_confirmadas.add(asiento);
+          // System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+        }
         break;
-      // }
       case 3:
-        // synchronized (lockVerificadas) {
-        reservas_verificadas.add(asiento);
-        System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(),
-            asiento.getFila());
-        System.out.flush();
+        synchronized (reservas_verificadas) {
+          reservas_verificadas.add(asiento);
+          // System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(),
+          // asiento.getFila());
+          // System.out.flush();
+        }
         break;
-      // }
     }
   }
 
   public synchronized void eliminar_reserva(int tipo, Asiento asiento) {
     switch (tipo) {
       case 0:
-        // synchronized (lockPendientes) {
-        // if (reservas_pendientes.indexOf(asiento) == -1) {
-        // System.out.println("Elemento eliminado correctamente");
-        // }
-        reservas_pendientes.remove(asiento);
-        // Iterator<Asiento> iterator = reservas_pendientes.iterator();
-        // while (iterator.hasNext()) {
-        // Asiento a = iterator.next();
-        // if (a == asiento) {
-        // iterator.remove(); // Remove the element using the iterator
-        // break;
-        // }
-        // }
+        synchronized (reservas_pendientes) {
+          reservas_pendientes.remove(asiento);
+        }
         break;
-      // }
       case 1:
-        // synchronized (lockCanceladas) {
-        reservas_canceladas.remove(asiento);
-        // Iterator<Asiento> iterator = reservas_pendientes.iterator();
-        // while (iterator.hasNext()) {
-        // Asiento a = iterator.next();
-        // if (a == asiento) {
-        // iterator.remove(); // Remove the element using the iterator
-        // break;
-        // }
-        // }
+        synchronized (reservas_canceladas) {
+          reservas_canceladas.remove(asiento);
+        }
         break;
-      // }
       case 2:
-        // synchronized (lockConfirmadas) {
-        reservas_confirmadas.remove(asiento);
-        // Iterator<Asiento> iterator = reservas_pendientes.iterator();
-        // while (iterator.hasNext()) {
-        // Asiento a = iterator.next();
-        // if (a == asiento) {
-        // iterator.remove(); // Remove the element using the iterator
-        // break;
-        // }
-        // }
+        synchronized (reservas_confirmadas) {
+          reservas_confirmadas.remove(asiento);
+        }
         break;
       case 3:
-        // synchronized (lockVerificadas) {
-        reservas_verificadas.remove(asiento);
-        // Iterator<Asiento> iterator = reservas_pendientes.iterator();
-        // while (iterator.hasNext()) {
-        // Asiento a = iterator.next();
-        // if (a == asiento) {
-        // iterator.remove(); // Remove the element using the iterator
-        // break;
-        // }
-        // }
+        synchronized (reservas_verificadas) {
+          reservas_verificadas.remove(asiento);
+        }
         break;
-      // }
     }
 
   }
 
-  public synchronized int getCanceladas_size() {
-    // synchronized (lockCanceladas) {
-    return reservas_canceladas.size();
-    // }
+  public int getCanceladas_size() {
+    synchronized (reservas_canceladas) {
+      return reservas_canceladas.size();
+    }
   }
 
-  public synchronized int getPendientes_size() {
-    // synchronized (lockPendientes) {
-    return reservas_pendientes.size();
-    // }
+  public int getPendientes_size() {
+    synchronized (reservas_pendientes) {
+      return reservas_pendientes.size();
+    }
   }
 
-  public synchronized int getConfirmadas_size() {
-    // synchronized (lockConfirmadas) {
-    return reservas_confirmadas.size();
-    // }
+  public int getConfirmadas_size() {
+    synchronized (reservas_confirmadas) {
+      return reservas_confirmadas.size();
+    }
   }
 
-  public synchronized int getVerificadas_size() {
-    // synchronized (lockVerificadas) {
-    return reservas_verificadas.size();
-    // }
+  public int getVerificadas_size() {
+    synchronized (reservas_verificadas) {
+      return reservas_verificadas.size();
+    }
   }
 
   public synchronized Asiento getAsiento(int f, int c) {
-    // synchronized (matriz_asientos) {
-    return matriz_asientos[f][c];
-    // }
+    synchronized (matriz_asientos) {
+      return matriz_asientos[f][c];
+    }
   }
 
 }

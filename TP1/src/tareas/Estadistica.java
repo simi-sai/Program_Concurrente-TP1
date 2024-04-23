@@ -13,16 +13,22 @@ public class Estadistica implements Runnable {
 
   @Override
   public void run() {
-    int totalVerif, totalCanceladas, totalReservas;
+    int totalVerif, totalCanceladas, totalReservas, totalPendientes, totalConfirm;
     double porcentajeVuelo = 0;
     while (true) {
       try {
         FileWriter fw = new FileWriter("statistics.txt", true); // Append to the file
         PrintWriter writer = new PrintWriter(fw);
+        totalPendientes = registros.getPendientes_size();
         totalVerif = registros.getVerificadas_size();
         totalCanceladas = registros.getCanceladas_size();
+        totalConfirm = registros.getConfirmadas_size();
         totalReservas = totalVerif + totalCanceladas;
         porcentajeVuelo = (totalVerif * 100) / 186;
+        System.out.printf(
+            "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n", totalPendientes, totalConfirm,
+            totalVerif, totalCanceladas, totalReservas);
+        System.out.flush();
         writer.printf("Reservations Verified: %d, Cancelled: %d, Total: %d\n",
             totalVerif, totalCanceladas,
             totalReservas);

@@ -39,10 +39,11 @@ public class EtapaPago {
             registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
             if (randomNumber < 90) {
               // Aprobado
-              randomAsiento.confirmarReserva();
+              // randomAsiento.confirmarReserva();
+              randomAsiento.setEstado(1);
               registros.registrar_reserva(2, randomAsiento); // Se agrega a la lista de reservas confirmadas
             } else {
-              randomAsiento.cancelarReserva();
+              randomAsiento.setEstado(-1);
               registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
             }
           }
@@ -58,12 +59,6 @@ public class EtapaPago {
     }
   }
 
-  // private boolean noMoreSeats() {
-  // if (registros.getPendientes_size() == 0) {
-  // return true;
-  // }
-  // return false;
-  // }
   private boolean noMoreSeats() {
     if (registros.getPendientes_size() == 0) {
       return true;

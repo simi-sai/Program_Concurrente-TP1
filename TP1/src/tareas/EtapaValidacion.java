@@ -39,7 +39,7 @@ public class EtapaValidacion {
         int randomNumber = random.nextInt(100);
         // Checks if the randomAsiento != (which means that there is a confirmed
         // reservation) and if it wasn't already checked
-        if (randomAsiento != null && (randomAsiento.getChecked() == 0)) {
+        if (randomAsiento != null && (randomAsiento.getChecked() == false)) {
           // Synchronize on the randomAsiento to avoid conflicts with other threads
           synchronized (randomAsiento) {
             if (randomNumber < 90) {
@@ -49,7 +49,8 @@ public class EtapaValidacion {
               // Cancel the reservation: Set the seat as discarded, add to the canceled
               // reservations list, and remove from confirmed list
               registros.eliminar_reserva(2, randomAsiento);
-              randomAsiento.cancelarReserva();
+              // randomAsiento.cancelarReserva();
+              randomAsiento.setEstado(-1);
               registros.registrar_reserva(1, randomAsiento);
             }
           }

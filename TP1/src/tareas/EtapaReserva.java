@@ -31,9 +31,9 @@ public class EtapaReserva {
           randomRow = random.nextInt(31);
           randomColumn = random.nextInt(6);
           randomAsiento = registros.getAsiento(randomRow, randomColumn);
-        } while (randomAsiento.getEstadoReserva() != 0);
+        } while (randomAsiento.getEstado() != 0);
         synchronized (randomAsiento) {
-          randomAsiento.reservar();
+          // randomAsiento.reservar();
           registros.registrar_reserva(0, randomAsiento);
           ASIENTOS_LIBRES.incrementAndGet();
         }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaPago {
   private Registros registros;
-  private static final int DURACION_ITERACION = 200; // 40 milisegundos
+  private static final int DURACION_ITERACION = 300; // 40 milisegundos
 
   public EtapaPago(Registros registros) {
     this.registros = registros;
@@ -36,6 +36,7 @@ public class EtapaPago {
         if (randomAsiento != null) {
           // Synchronize on the randomAsiento to avoid conflicts with other threads
           synchronized (randomAsiento) {
+            registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
             if (randomNumber < 90) {
               // Aprobado
               randomAsiento.confirmarReserva();
@@ -44,7 +45,6 @@ public class EtapaPago {
               randomAsiento.cancelarReserva();
               registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
             }
-            registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
           }
         } else {
           continue;

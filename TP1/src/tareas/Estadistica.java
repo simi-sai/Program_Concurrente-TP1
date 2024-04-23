@@ -3,7 +3,6 @@ package tareas;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Random;
 
 public class Estadistica implements Runnable {
   private Registros registros;
@@ -35,7 +34,7 @@ public class Estadistica implements Runnable {
       }
       if (allSeatsVerified()) {
         try {
-          Thread.sleep(5000);
+          Thread.sleep(4500);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

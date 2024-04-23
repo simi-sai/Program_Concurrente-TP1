@@ -37,8 +37,10 @@ public class EtapaValidacion {
         Asiento randomAsiento = registros.get_reserva(2);
         // Generate a random number between 0 and 99
         int randomNumber = random.nextInt(100);
-        // Synchronize on the randomAsiento to avoid conflicts with other threads
-        if (randomAsiento != null) {
+        // Checks if the randomAsiento != (which means that there is a confirmed
+        // reservation) and if it wasn't already checked
+        if (randomAsiento != null && (randomAsiento.getChecked() == 0)) {
+          // Synchronize on the randomAsiento to avoid conflicts with other threads
           synchronized (randomAsiento) {
             if (randomNumber < 90) {
               // Mark the reservation as checked
@@ -46,9 +48,9 @@ public class EtapaValidacion {
             } else {
               // Cancel the reservation: Set the seat as discarded, add to the canceled
               // reservations list, and remove from confirmed list
+              registros.eliminar_reserva(2, randomAsiento);
               randomAsiento.cancelarReserva();
               registros.registrar_reserva(1, randomAsiento);
-              registros.eliminar_reserva(2, randomAsiento);
             }
           }
         } else {
@@ -66,8 +68,10 @@ public class EtapaValidacion {
   public void ejecutarEtapa() {
     Thread t1 = new Thread(new ThreadValid());
     Thread t2 = new Thread(new ThreadValid());
+    Thread t3 = new Thread(new ThreadValid());
     t1.start();
     t2.start();
+    t3.start();
   }
 
 }

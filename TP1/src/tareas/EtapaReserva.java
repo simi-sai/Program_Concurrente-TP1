@@ -18,7 +18,6 @@ public class EtapaReserva {
      * This method runs in a loop, attempting to reserve random seats until all
      * seats are reserved.
      */
-    @Override
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
@@ -32,6 +31,7 @@ public class EtapaReserva {
           randomColumn = random.nextInt(6);
           randomAsiento = registros.getAsiento(randomRow, randomColumn);
         } while (randomAsiento.getEstado() != 0);
+
         synchronized (randomAsiento) {
           randomAsiento.setEstado(1);
           registros.registrar_reserva(0, randomAsiento);

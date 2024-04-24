@@ -13,7 +13,6 @@ public class EtapaPago {
   // Define a thread that processes pending reservations, approves or rejects them
   // randomly
   private class ThreadPago implements Runnable {
-    @Override
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();

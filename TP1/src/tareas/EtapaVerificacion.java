@@ -11,14 +11,13 @@ public class EtapaVerificacion {
   }
 
   private class ThreadVerif implements Runnable {
-    @Override
     public void run() {
       Random random = new Random();
       while (true) {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.sleep(random.nextInt(2000, 4000)); // 2-4 sg
+            Thread.slee(random.nextInt(2000, 4000)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

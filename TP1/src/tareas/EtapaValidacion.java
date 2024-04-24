@@ -13,7 +13,6 @@ public class EtapaValidacion {
   // Define a thread that checks confirmed reservations, marking them as checked
   // or canceling them randomly
   private class ThreadValid implements Runnable {
-    @Override
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();

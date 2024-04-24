@@ -4,16 +4,16 @@ public class Main {
   public static void main(String[] args) {
     long startTime = System.currentTimeMillis();
     Registros registros = new Registros();
-    EtapaReserva etapa1 = new EtapaReserva(registros);
-    EtapaPago etapa2 = new EtapaPago(registros);
-    EtapaValidacion etapa3 = new EtapaValidacion(registros);
-    EtapaVerificacion etapa4 = new EtapaVerificacion(registros);
+    EtapaReserva reservas = new EtapaReserva(registros);
+    EtapaPago pagos = new EtapaPago(registros);
+    EtapaValidacion validaciones = new EtapaValidacion(registros);
+    EtapaVerificacion verificaciones = new EtapaVerificacion(registros);
     Estadistica stat = new Estadistica(registros);
     Thread statThread = new Thread(stat);
-    etapa1.ejecutarEtapa();
-    etapa2.ejecutarEtapa();
-    etapa3.ejecutarEtapa();
-    etapa4.ejecutarEtapa();
+    reservas.ejecutarEtapa();
+    pagos.ejecutarEtapa();
+    validaciones.ejecutarEtapa();
+    verificaciones.ejecutarEtapa();
     statThread.start();
     try {
       statThread.join();

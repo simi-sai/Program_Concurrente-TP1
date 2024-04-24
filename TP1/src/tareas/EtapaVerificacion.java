@@ -11,7 +11,6 @@ public class EtapaVerificacion {
   }
 
   private class ThreadVerif implements Runnable {
-    @Override
     public void run() {
       Random random = new Random();
       while (true) {

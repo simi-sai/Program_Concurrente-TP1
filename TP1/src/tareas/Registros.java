@@ -80,7 +80,7 @@ public class Registros {
    * 2: reserva confirmada
    * 3: reserva verificada
    */
-  public synchronized void registrar_reserva(int tipo, Asiento asiento) {
+  public void registrar_reserva(int tipo, Asiento asiento) {
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
@@ -117,7 +117,7 @@ public class Registros {
     }
   }
 
-  public synchronized void eliminar_reserva(int tipo, Asiento asiento) {
+  public void eliminar_reserva(int tipo, Asiento asiento) {
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
@@ -167,7 +167,7 @@ public class Registros {
     }
   }
 
-  public synchronized Asiento getAsiento(int f, int c) {
+  public Asiento getAsiento(int f, int c) {
     synchronized (matriz_asientos) {
       return matriz_asientos[f][c];
     }

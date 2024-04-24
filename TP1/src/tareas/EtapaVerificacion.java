@@ -17,7 +17,7 @@ public class EtapaVerificacion {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.slee(random.nextInt(2000, 4000)); // 2-4 sg
+            Thread.sleep(random.nextInt(2000, 4000)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

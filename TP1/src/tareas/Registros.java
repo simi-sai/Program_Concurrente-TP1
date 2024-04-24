@@ -30,7 +30,7 @@ public class Registros {
    * @param tipo Type of reservation to get
    * @return The reservation seat retrieved
    */
-  public synchronized Asiento get_reserva(int tipo) {
+  public Asiento get_reserva(int tipo) {
     int reservaIndex;
     Asiento asiento = null;
     switch (tipo) {

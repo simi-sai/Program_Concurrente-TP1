@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class EtapaReserva {
   private Registros registros;
-  private static final int DURACION_ITERACION = 400; // 500 milliseconds (for now)
+  private static final int DURACION_ITERACION = 40; // 500 milliseconds (for now)
   private AtomicInteger ASIENTOS_LIBRES = new AtomicInteger(0);
 
   public EtapaReserva(Registros registros) {
@@ -18,7 +18,6 @@ public class EtapaReserva {
      * This method runs in a loop, attempting to reserve random seats until all
      * seats are reserved.
      */
-    @Override
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
@@ -32,8 +31,9 @@ public class EtapaReserva {
           randomColumn = random.nextInt(6);
           randomAsiento = registros.getAsiento(randomRow, randomColumn);
         } while (randomAsiento.getEstado() != 0);
+
         synchronized (randomAsiento) {
-          // randomAsiento.reservar();
+          randomAsiento.setEstado(1);
           registros.registrar_reserva(0, randomAsiento);
           ASIENTOS_LIBRES.incrementAndGet();
         }

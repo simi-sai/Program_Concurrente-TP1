@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaPago {
   private Registros registros;
-  private static final int DURACION_ITERACION = 300; // 40 milisegundos
+  private static final int DURACION_ITERACION = 30; // 40 milisegundos
 
   public EtapaPago(Registros registros) {
     this.registros = registros;
@@ -13,7 +13,6 @@ public class EtapaPago {
   // Define a thread that processes pending reservations, approves or rejects them
   // randomly
   private class ThreadPago implements Runnable {
-    @Override
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
@@ -21,7 +20,7 @@ public class EtapaPago {
       while (true) {
         if (noMoreSeats()) {
           try {
-            Thread.sleep(random.nextInt(1000, 3000)); // 2-4 sg
+            Thread.sleep(random.nextInt(100, 300)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -33,13 +32,11 @@ public class EtapaPago {
         // Takes a random reservation from the pending list
         Asiento randomAsiento = registros.get_reserva(0);
         int randomNumber = random.nextInt(100);
-        if (randomAsiento != null) {
-          // Synchronize on the randomAsiento to avoid conflicts with other threads
-          synchronized (randomAsiento) {
-            registros.eliminar_reserva(0, randomAsiento); // Se elimina de la lista de pendientes
+        // Synchronize on the randomAsiento to avoid conflicts with other threads
+        synchronized (randomAsiento) {
+          if (registros.eliminar_reserva(0, randomAsiento)) { // Se elimina de la lista de pendientes
             if (randomNumber < 90) {
               // Aprobado
-              // randomAsiento.confirmarReserva();
               randomAsiento.setEstado(1);
               registros.registrar_reserva(2, randomAsiento); // Se agrega a la lista de reservas confirmadas
             } else {
@@ -47,8 +44,6 @@ public class EtapaPago {
               registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
             }
           }
-        } else {
-          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

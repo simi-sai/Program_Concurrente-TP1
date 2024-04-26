@@ -25,10 +25,11 @@ public class Estadistica implements Runnable {
         totalConfirm = registros.getConfirmadas_size();
         totalReservas = totalVerif + totalCanceladas;
         porcentajeVuelo = (totalVerif * 100) / 186;
-        System.out.printf(
-            "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n", totalPendientes, totalConfirm,
-            totalVerif, totalCanceladas, totalReservas);
-        System.out.flush();
+        // System.out.printf(
+        // "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n",
+        // totalPendientes, totalConfirm,
+        // totalVerif, totalCanceladas, totalReservas);
+        // System.out.flush();
         writer.printf("Reservations Verified: %d, Cancelled: %d, Total: %d\n",
             totalVerif, totalCanceladas,
             totalReservas);
@@ -40,7 +41,7 @@ public class Estadistica implements Runnable {
       }
       if (allSeatsVerified()) {
         try {
-          Thread.sleep(4500);
+          Thread.sleep(450);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -50,7 +51,7 @@ public class Estadistica implements Runnable {
         break;
       }
       try {
-        Thread.sleep(200);
+        Thread.sleep(20);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -61,7 +62,7 @@ public class Estadistica implements Runnable {
     int totalVerif = registros.getVerificadas_size();
     int totalCanceladas = registros.getCanceladas_size();
     int totalReservas = totalVerif + totalCanceladas;
-    if (totalReservas == 186) {
+    if (totalReservas >= 186) {
       return true;
     } else {
       return false;

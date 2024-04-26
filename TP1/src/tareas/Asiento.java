@@ -6,7 +6,6 @@ public class Asiento {
   private int fila;
   private int columna;
   private boolean checked;
-  private final Object lock = new Object();
 
   // Constructor
   public Asiento(int f, int c) {

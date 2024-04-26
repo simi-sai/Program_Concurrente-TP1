@@ -13,15 +13,16 @@ public class EtapaVerificacion {
   private class ThreadVerif implements Runnable {
     public void run() {
       Random random = new Random();
+
       while (true) {
-        if (registros.getConfirmadas_size() == 0) {
-          // Wait for a random amount of time before trying again
+        if (noMoreSeats()) {
+          
           try {
             Thread.sleep(random.nextInt(200, 400)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
-          // Exit the loop if there are no more confirmed reservations
+          
           if (registros.getConfirmadas_size() == 0) {
             System.out.println("--------- Thread VERIFICACION: finished ---------");
             System.out.flush();
@@ -33,8 +34,7 @@ public class EtapaVerificacion {
 
         // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
-          if (randomAsiento.getChecked() == true) {
-            // Perform the verification
+          if (randomAsiento.getChecked()) {
             if (registros.eliminar_reserva(2, randomAsiento)) {
               registros.registrar_reserva(3, randomAsiento);
             }
@@ -49,11 +49,17 @@ public class EtapaVerificacion {
     }
   }
 
+  private boolean noMoreSeats() {
+    if (registros.getConfirmadas_size() == 0) {
+      return true;
+    }
+    return false; // All seats are reserved
+  }
+
   public void ejecutarEtapa() {
     Thread t1 = new Thread(new ThreadVerif());
     Thread t2 = new Thread(new ThreadVerif());
     t1.start();
     t2.start();
   }
-
 }

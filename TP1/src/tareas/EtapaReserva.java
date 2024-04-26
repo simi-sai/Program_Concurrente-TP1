@@ -13,20 +13,16 @@ public class EtapaReserva {
   }
 
   private class ThreadReserva implements Runnable {
-    /**
-     * Implementation of the run method for the ThreadReserva class.
-     * This method runs in a loop, attempting to reserve random seats until all
-     * seats are reserved.
-     */
     public void run() {
       // Create a random object for generating random numbers
       Random random = new Random();
+
       while (ASIENTOS_LIBRES.get() < 186) {
         int randomRow;
         int randomColumn;
         Asiento randomAsiento;
+
         do {
-          // Reserve the random seat
           randomRow = random.nextInt(31);
           randomColumn = random.nextInt(6);
           randomAsiento = registros.getAsiento(randomRow, randomColumn);
@@ -47,11 +43,9 @@ public class EtapaReserva {
       System.out.println("------------------ All seats are reserved. Exiting. -----------------");
       System.out.flush();
     }
-
   }
 
   public void ejecutarEtapa() {
-    // Initialize all seats
     Thread thread1 = new Thread(new ThreadReserva());
     Thread thread2 = new Thread(new ThreadReserva());
     Thread thread3 = new Thread(new ThreadReserva());

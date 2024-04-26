@@ -15,6 +15,7 @@ public class Estadistica implements Runnable {
   public void run() {
     int totalVerif, totalCanceladas, totalReservas, totalPendientes, totalConfirm;
     double porcentajeVuelo = 0;
+
     while (true) {
       try {
         FileWriter fw = new FileWriter("statistics.txt", true); // Append to the file
@@ -39,17 +40,20 @@ public class Estadistica implements Runnable {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
       if (allSeatsVerified()) {
         try {
           Thread.sleep(450);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
+
         System.out.println("The statistics are ready");
         System.out.println("Percentage reservations: " + porcentajeVuelo + "%");
         System.out.flush();
         break;
       }
+      
       try {
         Thread.sleep(20);
       } catch (InterruptedException e) {

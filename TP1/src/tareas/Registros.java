@@ -30,47 +30,67 @@ public class Registros {
    * @param tipo Type of reservation to get
    * @return The reservation seat retrieved
    */
-  public synchronized Asiento get_reserva(int tipo) {
+  public Asiento get_reserva(int tipo) {
     int reservaIndex;
     Asiento asiento = null;
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
-          if (!reservas_pendientes.isEmpty()) {
-            reservaIndex = random.nextInt(reservas_pendientes.size());
-            asiento = reservas_pendientes.get(reservaIndex);
+          while (reservas_pendientes.isEmpty()) {
+            try {
+              reservas_pendientes.wait(); // Wait until there is a reservation added
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
           }
+          reservaIndex = random.nextInt(reservas_pendientes.size());
+          asiento = reservas_pendientes.get(reservaIndex);
+          return asiento;
         }
-        break;
       case 1:
         synchronized (reservas_canceladas) {
-          if (!reservas_canceladas.isEmpty()) {
-            reservaIndex = random.nextInt(reservas_canceladas.size());
-            asiento = reservas_canceladas.get(reservaIndex);
+          while (reservas_canceladas.isEmpty()) {
+            try {
+              reservas_canceladas.wait(); // Wait until there is a reservation added
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
           }
+          reservaIndex = random.nextInt(reservas_canceladas.size());
+          asiento = reservas_canceladas.get(reservaIndex);
+          return asiento;
         }
-        break;
       case 2:
         synchronized (reservas_confirmadas) {
-          if (!reservas_confirmadas.isEmpty()) {
-            reservaIndex = random.nextInt(reservas_confirmadas.size());
-            asiento = reservas_confirmadas.get(reservaIndex);
+          while (reservas_confirmadas.isEmpty()) {
+            try {
+              reservas_confirmadas.wait(); // Wait until there is a reservation added
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
           }
+          reservaIndex = random.nextInt(reservas_confirmadas.size());
+          asiento = reservas_confirmadas.get(reservaIndex);
+          return asiento;
         }
-        break;
       case 3:
         synchronized (reservas_verificadas) {
-          if (!reservas_verificadas.isEmpty()) {
-            reservaIndex = random.nextInt(reservas_verificadas.size());
-            asiento = reservas_verificadas.get(reservaIndex);
+          while (reservas_verificadas.isEmpty()) {
+            try {
+              reservas_verificadas.wait(); // Wait until there is a reservation added
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
           }
+          reservaIndex = random.nextInt(reservas_verificadas.size());
+          asiento = reservas_verificadas.get(reservaIndex);
+          return asiento;
         }
-        break;
       default:
         // Handle unexpected tipo values
         System.err.println("Invalid tipo value: " + tipo);
     }
-    return asiento;
+    return null;
   }
 
   /*
@@ -85,62 +105,58 @@ public class Registros {
       case 0:
         synchronized (reservas_pendientes) {
           reservas_pendientes.add(asiento);
-          // System.out.printf("Reserva pendiente id: [%d:%d]\n", .getColumna(),
-          // asiento.getFila());
-          // System.out.flush();
+          reservas_pendientes.notifyAll(); // Notify all threads waiting on this object so they can try get the lock
+          return;
         }
-        break;
       case 1:
         synchronized (reservas_canceladas) {
           reservas_canceladas.add(asiento);
-          // System.out.printf("Reserva cancelada id: [%d:%d]\n", asiento.getColumna(),
-          // asiento.getFila());
-          // System.out.flush();
+          reservas_canceladas.notifyAll();
+          return;
         }
-        break;
       case 2:
         synchronized (reservas_confirmadas) {
           reservas_confirmadas.add(asiento);
-          // System.out.printf("Reserva confirmada id: [%d:%d]\n", asiento.getColumna(),
-          // asiento.getFila());
-          // System.out.flush();
+          reservas_confirmadas.notifyAll();
+          return;
         }
-        break;
       case 3:
         synchronized (reservas_verificadas) {
           reservas_verificadas.add(asiento);
-          // System.out.printf("Reserva verificada id: [%d:%d]\n", asiento.getColumna(),
-          // asiento.getFila());
-          // System.out.flush();
+          reservas_verificadas.notifyAll();
+          return;
         }
-        break;
     }
   }
 
-  public void eliminar_reserva(int tipo, Asiento asiento) {
+  public boolean eliminar_reserva(int tipo, Asiento asiento) {
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
-          reservas_pendientes.remove(asiento);
+          if (reservas_pendientes.remove(asiento)) {
+            return true;
+          }
         }
-        break;
       case 1:
         synchronized (reservas_canceladas) {
-          reservas_canceladas.remove(asiento);
+          if (reservas_canceladas.remove(asiento)) {
+            return true;
+          }
         }
-        break;
       case 2:
         synchronized (reservas_confirmadas) {
-          reservas_confirmadas.remove(asiento);
+          if (reservas_confirmadas.remove(asiento)) {
+            return true;
+          }
         }
-        break;
       case 3:
         synchronized (reservas_verificadas) {
-          reservas_verificadas.remove(asiento);
+          if (reservas_verificadas.remove(asiento)) {
+            return true;
+          }
         }
-        break;
     }
-
+    return false;
   }
 
   public int getCanceladas_size() {
@@ -171,6 +187,14 @@ public class Registros {
     synchronized (matriz_asientos) {
       return matriz_asientos[f][c];
     }
+  }
+
+  public void imprimir_reservas() {
+    System.out.println("\nPendientes: " + getPendientes_size());
+    System.out.println("Canceladas: " + getCanceladas_size());
+    System.out.println("Confirmadas: " + getConfirmadas_size());
+    System.out.println("Verificadas: " + getVerificadas_size());
+    System.out.println("Total: " + (getCanceladas_size() + getVerificadas_size()));
   }
 
 }

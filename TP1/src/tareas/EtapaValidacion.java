@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 20;
+  private static final int DURACION_ITERACION = 300;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
@@ -15,30 +15,29 @@ public class EtapaValidacion {
       Random random = new Random();
       
       while (true) {
-        if (noMoreSeats()) {
+        if (noMoreConfirmadas()) {
           try {
-            Thread.sleep(random.nextInt(100, 300)); // 2-4 sg
+            //Thread.sleep(random.nextInt(1000, 3000));
+            Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
           
-          if (registros.getConfirmadas_size() == 0) {
-            System.out.println("--------- Thread validacion: finished ---------");
+          if (noMoreConfirmadas()) {
+            System.out.println("--------- Thread VALIDACION: finished ---------" + System.currentTimeMillis());
             System.out.flush();
             break;
           }
         }
         
-        Asiento randomAsiento = registros.get_reserva(2);
         int randomNumber = random.nextInt(100);
+        Asiento randomAsiento = registros.get_reserva(2);
         
         synchronized (randomAsiento) {
-          if (randomAsiento.getChecked() == false) {
+          if (!registros.getChecked(randomAsiento)) {
             if (randomNumber < 90) {
-              randomAsiento.setChecked();
+              registros.setChecked(randomAsiento);
             } else {
-              randomAsiento.setEstado(-1);
-
               if (registros.eliminar_reserva(2, randomAsiento)) {
                 registros.registrar_reserva(1, randomAsiento);
               }
@@ -55,11 +54,8 @@ public class EtapaValidacion {
     }
   }
 
-  private boolean noMoreSeats() {
-    if (registros.getConfirmadas_size() == 0) {
-      return true;
-    }
-    return false; // All seats are reserved
+  private boolean noMoreConfirmadas() {
+    return registros.getConfirmadas_size() == 0;
   }
 
   public void ejecutarEtapa() {

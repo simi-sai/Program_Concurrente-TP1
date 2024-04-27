@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaPago {
   private Registros registros;
-  private static final int DURACION_ITERACION = 30; // 40 milisegundos
+  private static final int DURACION_ITERACION = 250;
 
   public EtapaPago(Registros registros) {
     this.registros = registros;
@@ -15,29 +15,28 @@ public class EtapaPago {
       Random random = new Random();
       
       while (true) {
-        if (noMoreSeats()) {
+        if (noMorePendientes()) {
           try {
-            Thread.sleep(random.nextInt(100, 300)); // 2-4 sg
+            //Thread.sleep(random.nextInt(1000, 3000));
+            Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
 
-          if (noMoreSeats()) {
-            System.out.println("---------$$$$$$ Todos los pagos completos $$$$$$---------");
+          if (noMorePendientes()) {
+            System.out.println("--------- Thread PAGO: finished ---------" + System.currentTimeMillis());
             break;
           }
         }
     
-        Asiento randomAsiento = registros.get_reserva(0);
         int randomNumber = random.nextInt(100);
+        Asiento randomAsiento = registros.get_reserva(0);
         
         synchronized (randomAsiento) {
           if (registros.eliminar_reserva(0, randomAsiento)) { // Se elimina de la lista de pendientes
             if (randomNumber < 90) {
-              randomAsiento.setEstado(1);
               registros.registrar_reserva(2, randomAsiento); // Se agrega a la lista de reservas confirmadas
             } else {
-              randomAsiento.setEstado(-1);
               registros.registrar_reserva(1, randomAsiento); // Se agrega a la lista de reservas canceladas
             }
           }
@@ -52,11 +51,8 @@ public class EtapaPago {
     }
   }
 
-  private boolean noMoreSeats() {
-    if (registros.getPendientes_size() == 0) {
-      return true;
-    }
-    return false; // All seats are reserved
+  private boolean noMorePendientes() {
+    return registros.getPendientes_size() == 0;
   }
   
   public void ejecutarEtapa() {

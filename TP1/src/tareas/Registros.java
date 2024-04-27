@@ -10,6 +10,7 @@ public class Registros {
   private static ArrayList<Asiento> reservas_verificadas = new ArrayList<>();
   private static Asiento[][] matriz_asientos = new Asiento[31][6];
   private static Random random = new Random();
+  private static Random random_2 = new Random();
 
   public Registros() {
     for (int i = 0; i < 31; i++) {
@@ -22,6 +23,7 @@ public class Registros {
   public Asiento get_reserva(int tipo) {
     int reservaIndex;
     Asiento asiento = null;
+
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
@@ -45,7 +47,7 @@ public class Registros {
               e.printStackTrace();
             }
           }
-          reservaIndex = random.nextInt(reservas_confirmadas.size());
+          reservaIndex = random_2.nextInt(reservas_confirmadas.size());
           asiento = reservas_confirmadas.get(reservaIndex);
           return asiento;
         }
@@ -61,12 +63,14 @@ public class Registros {
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
+          asiento.setEstado(1);
           reservas_pendientes.add(asiento);
           reservas_pendientes.notifyAll(); // Notify all threads waiting on this object so they can try get the lock
           return;
         }
       case 1:
         synchronized (reservas_canceladas) {
+          asiento.setEstado(-1);
           reservas_canceladas.add(asiento);
           reservas_canceladas.notifyAll();
           return;
@@ -90,18 +94,28 @@ public class Registros {
     switch (tipo) {
       case 0:
         synchronized (reservas_pendientes) {
-          if (reservas_pendientes.remove(asiento)) {
-            return true;
-          }
+          return reservas_pendientes.remove(asiento);
         }
       case 2:
         synchronized (reservas_confirmadas) {
-          if (reservas_confirmadas.remove(asiento)) {
-            return true;
-          }
+          return reservas_confirmadas.remove(asiento);
         }
+      default:
+      System.err.println("Invalid tipo value: " + tipo);  
+      return false;
     }
-    return false;
+  }
+  
+  public void setChecked(Asiento asiento) {
+    synchronized (reservas_confirmadas) {
+      asiento.setChecked();
+    }
+  }
+
+  public boolean getChecked(Asiento asiento) {
+    synchronized (reservas_confirmadas) {
+      return asiento.getChecked();
+    }
   }
 
   public int getCanceladas_size() {

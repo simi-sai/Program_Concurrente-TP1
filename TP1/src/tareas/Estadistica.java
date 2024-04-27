@@ -11,7 +11,6 @@ public class Estadistica implements Runnable {
     this.registros = registros;
   }
 
-  @Override
   public void run() {
     int totalVerif, totalCanceladas, totalReservas, totalPendientes, totalConfirm;
     double porcentajeVuelo = 0;
@@ -26,11 +25,11 @@ public class Estadistica implements Runnable {
         totalConfirm = registros.getConfirmadas_size();
         totalReservas = totalVerif + totalCanceladas;
         porcentajeVuelo = (totalVerif * 100) / 186;
-        // System.out.printf(
-        // "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n",
-        // totalPendientes, totalConfirm,
-        // totalVerif, totalCanceladas, totalReservas);
-        // System.out.flush();
+        System.out.printf(
+        "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n",
+        totalPendientes, totalConfirm,
+        totalVerif, totalCanceladas, totalReservas);
+        System.out.flush();
         writer.printf("Reservations Verified: %d, Cancelled: %d, Total: %d\n",
             totalVerif, totalCanceladas,
             totalReservas);
@@ -43,7 +42,7 @@ public class Estadistica implements Runnable {
 
       if (allSeatsVerified()) {
         try {
-          Thread.sleep(450);
+          Thread.sleep(2000);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -55,7 +54,7 @@ public class Estadistica implements Runnable {
       }
       
       try {
-        Thread.sleep(20);
+        Thread.sleep(200);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -63,13 +62,9 @@ public class Estadistica implements Runnable {
   }
 
   private boolean allSeatsVerified() {
-    int totalVerif = registros.getVerificadas_size();
     int totalCanceladas = registros.getCanceladas_size();
-    int totalReservas = totalVerif + totalCanceladas;
-    if (totalReservas >= 186) {
-      return true;
-    } else {
-      return false;
-    }
+    int totalVerif = registros.getVerificadas_size();
+
+    return totalCanceladas + totalVerif >= 186;
   }
 }

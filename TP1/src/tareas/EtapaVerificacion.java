@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 150;
+  private static final int DURACION_ITERACION = 15;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -17,7 +17,7 @@ public class EtapaVerificacion {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.sleep(random.nextInt(2000, 4000)); // 2-4 sg
+            Thread.sleep(random.nextInt(200, 400)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -28,19 +28,17 @@ public class EtapaVerificacion {
             break;
           }
         }
+
         Asiento randomAsiento = registros.get_reserva(2);
 
-        if (randomAsiento != null) { // The randomAsiento will be null when there
-          // Synchronize on the randomAsiento to avoid conflicts with other threads
-          synchronized (randomAsiento) {
-            if (randomAsiento.getChecked() == true) {
-              // Perform the verification
-              registros.eliminar_reserva(2, randomAsiento);
+        // Synchronize on the randomAsiento to avoid conflicts with other threads
+        synchronized (randomAsiento) {
+          if (randomAsiento.getChecked() == true) {
+            // Perform the verification
+            if (registros.eliminar_reserva(2, randomAsiento)) {
               registros.registrar_reserva(3, randomAsiento);
             }
           }
-        } else {
-          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

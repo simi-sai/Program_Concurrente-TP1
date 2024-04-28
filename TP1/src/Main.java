@@ -16,12 +16,13 @@ public class Main {
     verificaciones.ejecutarEtapa();
     statThread.start();
     try {
-      statThread.join()
+      statThread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
     long endTime = System.currentTimeMillis();
     long elapsedTime = endTime - startTime;
+    registros.imprimir_reservas();
     System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000) + "s");
     System.out.flush();
   }

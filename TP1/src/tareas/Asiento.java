@@ -17,9 +17,7 @@ public class Asiento {
   }
 
   public int getEstado() {
-    synchronized (this) {
-      return estado;
-    }
+    return estado;
   }
 
   public void setEstado(int estado) {
@@ -35,9 +33,7 @@ public class Asiento {
   }
 
   public boolean getChecked() {
-    synchronized (lock) {
-      return checked;
-    }
+    return checked;
   }
 
   public void setChecked() {

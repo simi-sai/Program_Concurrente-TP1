@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 200;
+  private static final int DURACION_ITERACION = 20;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
@@ -21,7 +21,7 @@ public class EtapaValidacion {
         if (registros.getConfirmadas_size() == 0) {
           // Wait for a random amount of time before trying again
           try {
-            Thread.sleep(random.nextInt(1000, 3000)); // 2-4 sg
+            Thread.sleep(random.nextInt(100, 300)); // 2-4 sg
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -35,26 +35,21 @@ public class EtapaValidacion {
         // Takes a random reservation from the confirmed list
         Asiento randomAsiento = registros.get_reserva(2);
         int randomNumber = random.nextInt(100);
-        // Checks if the randomAsiento != (which means that there is a confirmed
-        // reservation)
-        if (randomAsiento != null) {
-          // Synchronize on the randomAsiento to avoid conflicts with other threads
-          synchronized (randomAsiento) {
-            if (randomAsiento.getChecked() == false) {
-              if (randomNumber < 90) {
-                // Mark the reservation as checked
-                randomAsiento.setChecked();
-              } else {
-                // Cancel the reservation: Set the seat as discarded, add to the canceled
-                // reservations list, and remove from confirmed list
-                randomAsiento.setEstado(-1);
-                registros.eliminar_reserva(2, randomAsiento);
+        // Synchronize on the randomAsiento to avoid conflicts with other threads
+        synchronized (randomAsiento) {
+          if (randomAsiento.getChecked() == false) {
+            if (randomNumber < 90) {
+              // Mark the reservation as checked
+              randomAsiento.setChecked();
+            } else {
+              // Cancel the reservation: Set the seat as discarded, add to the canceled
+              // reservations list, and remove from confirmed list
+              randomAsiento.setEstado(-1);
+              if (registros.eliminar_reserva(2, randomAsiento)) {
                 registros.registrar_reserva(1, randomAsiento);
               }
             }
           }
-        } else {
-          continue;
         }
         try {
           Thread.sleep(DURACION_ITERACION);

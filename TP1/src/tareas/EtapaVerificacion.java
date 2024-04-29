@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 150;
+  private static final int DURACION_ITERACION = 300;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
@@ -18,14 +18,14 @@ public class EtapaVerificacion {
         if (noMoreConfirmadas()) {
           
           try {
-            //Thread.sleep(random.nextInt(1000, 3000));
+            //Thread.sleep(random.nextInt(2000, 3000));
             Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
           
           if (noMoreConfirmadas()) {
-            System.out.println("--------- Thread VERIFICACION: finished --------- " + System.currentTimeMillis());
+            System.out.println("--------- Thread VERIFICACION: finished --------- ");
             System.out.flush();
             break;
           }

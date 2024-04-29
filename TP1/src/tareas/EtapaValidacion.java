@@ -24,7 +24,7 @@ public class EtapaValidacion {
           }
           
           if (noMoreConfirmadas()) {
-            System.out.println("--------- Thread VALIDACION: finished ---------" + System.currentTimeMillis());
+            System.out.println("--------- Thread VALIDACION: finished ---------");
             System.out.flush();
             break;
           }

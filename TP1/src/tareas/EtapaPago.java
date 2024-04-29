@@ -24,7 +24,7 @@ public class EtapaPago {
           }
 
           if (noMorePendientes()) {
-            System.out.println("--------- Thread PAGO: finished ---------" + System.currentTimeMillis());
+            System.out.println("--------- Thread PAGO: finished ---------");
             break;
           }
         }

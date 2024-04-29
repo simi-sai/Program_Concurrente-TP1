@@ -107,15 +107,11 @@ public class Registros {
   }
   
   public void setChecked(Asiento asiento) {
-    synchronized (reservas_confirmadas) {
-      asiento.setChecked();
-    }
+    asiento.setChecked();
   }
 
   public boolean getChecked(Asiento asiento) {
-    synchronized (reservas_confirmadas) {
-      return asiento.getChecked();
-    }
+    return asiento.getChecked();
   }
 
   public int getCanceladas_size() {

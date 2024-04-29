@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class EtapaReserva {
   private Registros registros;
-  private static final int DURACION_ITERACION = 500;
+  private static final int DURACION_ITERACION = 550;
   private AtomicInteger ASIENTOS_LIBRES = new AtomicInteger(0);
 
   public EtapaReserva(Registros registros) {
@@ -39,7 +39,7 @@ public class EtapaReserva {
           e.printStackTrace();
         }
       }
-      System.out.println("--------- Thread RESERVA: finished ---------" + System.currentTimeMillis());
+      System.out.println("--------- Thread RESERVA: finished ---------");
       System.out.flush();
     }
   }

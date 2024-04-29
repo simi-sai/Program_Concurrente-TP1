@@ -4,22 +4,21 @@ import java.util.Random;
 
 public class EtapaVerificacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 300;
+  private static final int DURACION_ITERACION = 100;
 
   public EtapaVerificacion(Registros registros) {
     this.registros = registros;
   }
 
   private class ThreadVerif implements Runnable {
-    public void run() {
-      Random random = new Random();
+    Random random = new Random();
 
+    public void run() {
       while (true) {
         if (noMoreConfirmadas()) {
-          
           try {
-            //Thread.sleep(random.nextInt(2000, 3000));
-            Thread.sleep(1000);
+            Thread.sleep(random.nextInt(2000, 3000));
+            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

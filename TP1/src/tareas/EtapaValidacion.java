@@ -4,21 +4,21 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 300;
+  private static final int DURACION_ITERACION = 250;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
   }
 
   private class ThreadValid implements Runnable {
+    Random random = new Random();
+
     public void run() {
-      Random random = new Random();
-      
       while (true) {
         if (noMoreConfirmadas()) {
           try {
-            //Thread.sleep(random.nextInt(1000, 3000));
-            Thread.sleep(1000);
+            Thread.sleep(random.nextInt(2000, 2500));
+            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

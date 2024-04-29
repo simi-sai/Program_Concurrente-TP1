@@ -11,14 +11,14 @@ public class EtapaPago {
   }
 
   private class ThreadPago implements Runnable {
+    Random random = new Random();
+
     public void run() {
-      Random random = new Random();
-      
       while (true) {
         if (noMorePendientes()) {
           try {
-            //Thread.sleep(random.nextInt(1000, 3000));
-            Thread.sleep(1000);
+            Thread.sleep(random.nextInt(1000, 2000));
+            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

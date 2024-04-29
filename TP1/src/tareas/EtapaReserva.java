@@ -13,10 +13,9 @@ public class EtapaReserva {
   }
 
   private class ThreadReserva implements Runnable {
+    Random random = new Random();
+    
     public void run() {
-      // Create a random object for generating random numbers
-      Random random = new Random();
-
       while (ASIENTOS_LIBRES.get() < 186) {
         int randomRow;
         int randomColumn;

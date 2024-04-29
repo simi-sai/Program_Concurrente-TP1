@@ -10,7 +10,6 @@ public class Registros {
   private static ArrayList<Asiento> reservas_verificadas = new ArrayList<>();
   private static Asiento[][] matriz_asientos = new Asiento[31][6];
   private static Random random = new Random();
-  private static Random random_2 = new Random();
 
   public Registros() {
     for (int i = 0; i < 31; i++) {
@@ -47,7 +46,7 @@ public class Registros {
               e.printStackTrace();
             }
           }
-          reservaIndex = random_2.nextInt(reservas_confirmadas.size());
+          reservaIndex = random.nextInt(reservas_confirmadas.size());
           asiento = reservas_confirmadas.get(reservaIndex);
           return asiento;
         }

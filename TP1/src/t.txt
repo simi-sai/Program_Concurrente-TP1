@@ -1,6 +1,0 @@
-Composicion:
-La relacion entre el todo (Registros) y la parte (Asiento)
-el todo y la parte no se pueden separar
-
-Agregacion: La clase contenida (Registros) no depende fuertemente de la vida del contenedor (las diferentes Etapas)
-

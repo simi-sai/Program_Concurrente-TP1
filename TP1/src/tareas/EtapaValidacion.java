@@ -4,58 +4,46 @@ import java.util.Random;
 
 public class EtapaValidacion {
   private Registros registros;
-  private static final int DURACION_ITERACION = 200;
+  private static final int DURACION_ITERACION = 250;
 
   public EtapaValidacion(Registros registros) {
     this.registros = registros;
   }
 
-  // Define a thread that checks confirmed reservations, marking them as checked
-  // or canceling them randomly
   private class ThreadValid implements Runnable {
+    Random random = new Random();
+
     public void run() {
-      // Create a random object for generating random numbers
-      Random random = new Random();
-      // Loop indefinitely
       while (true) {
-        if (registros.getConfirmadas_size() == 0) {
-          // Wait for a random amount of time before trying again
+        if (noMoreConfirmadas()) {
           try {
-            Thread.sleep(random.nextInt(1000, 3000)); // 2-4 sg
+            Thread.sleep(random.nextInt(2000, 2500));
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
-          // Exit the loop if there are no more confirmed reservations
-          if (registros.getConfirmadas_size() == 0) {
-            System.out.println("--------- Thread validacion: finished ---------");
+          
+          if (noMoreConfirmadas()) {
+            System.out.println("--------- Thread VALIDACION: finished ---------");
             System.out.flush();
             break;
           }
         }
-        // Takes a random reservation from the confirmed list
-        Asiento randomAsiento = registros.get_reserva(2);
+        
         int randomNumber = random.nextInt(100);
-        // Checks if the randomAsiento != (which means that there is a confirmed
-        // reservation)
-        if (randomAsiento != null) {
-          // Synchronize on the randomAsiento to avoid conflicts with other threads
-          synchronized (randomAsiento) {
-            if (randomAsiento.getChecked() == false) {
-              if (randomNumber < 90) {
-                // Mark the reservation as checked
-                randomAsiento.setChecked();
-              } else {
-                // Cancel the reservation: Set the seat as discarded, add to the canceled
-                // reservations list, and remove from confirmed list
-                randomAsiento.setEstado(-1);
-                registros.eliminar_reserva(2, randomAsiento);
+        Asiento randomAsiento = registros.get_reserva(2);
+        
+        synchronized (randomAsiento) {
+          if (!registros.getChecked(randomAsiento)) {
+            if (randomNumber < 90) {
+              registros.setChecked(randomAsiento);
+            } else {
+              if (registros.eliminar_reserva(2, randomAsiento)) {
                 registros.registrar_reserva(1, randomAsiento);
               }
             }
           }
-        } else {
-          continue;
         }
+
         try {
           Thread.sleep(DURACION_ITERACION);
         } catch (InterruptedException e) {
@@ -63,6 +51,10 @@ public class EtapaValidacion {
         }
       }
     }
+  }
+
+  private boolean noMoreConfirmadas() {
+    return registros.getConfirmadas_size() == 0;
   }
 
   public void ejecutarEtapa() {
@@ -73,5 +65,4 @@ public class EtapaValidacion {
     t2.start();
     t3.start();
   }
-
 }

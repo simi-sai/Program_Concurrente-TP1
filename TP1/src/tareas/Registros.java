@@ -21,7 +21,6 @@ public class Registros {
 
   public Asiento get_reserva(int tipo) {
     int reservaIndex;
-    Asiento asiento = null;
 
     switch (tipo) {
       case 0:
@@ -34,8 +33,7 @@ public class Registros {
             }
           }
           reservaIndex = random.nextInt(reservas_pendientes.size());
-          asiento = reservas_pendientes.get(reservaIndex);
-          return asiento;
+          return reservas_pendientes.get(reservaIndex);
         }
       case 2:
         synchronized (reservas_confirmadas) {
@@ -47,14 +45,13 @@ public class Registros {
             }
           }
           reservaIndex = random.nextInt(reservas_confirmadas.size());
-          asiento = reservas_confirmadas.get(reservaIndex);
-          return asiento;
+          return reservas_confirmadas.get(reservaIndex);
         }
       default:
         // Handle unexpected tipo values
         System.err.println("Invalid tipo value: " + tipo);
+        return null;
     }
-    return null;
   }
 
   // Tipos de Reserva: 0 - Pendiente, 1 - Cancelada, 2 - Confirmada, 3 - Verificada
@@ -71,7 +68,6 @@ public class Registros {
         synchronized (reservas_canceladas) {
           asiento.setEstado(-1);
           reservas_canceladas.add(asiento);
-          reservas_canceladas.notifyAll();
           return;
         }
       case 2:
@@ -83,7 +79,6 @@ public class Registros {
       case 3:
         synchronized (reservas_verificadas) {
           reservas_verificadas.add(asiento);
-          reservas_verificadas.notifyAll();
           return;
         }
     }
@@ -114,7 +109,7 @@ public class Registros {
   }
 
   public int getCanceladas_size() {
-    synchronized (reservas_canceladas) {
+    synchronized(reservas_canceladas) {
       return reservas_canceladas.size();
     }
   }

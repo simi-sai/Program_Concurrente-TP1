@@ -26,6 +26,7 @@ public class Main {
     
     long endTime = System.currentTimeMillis();
     long elapsedTime = endTime - startTime;
+    
     registros.imprimir_reservas();
     System.out.println("Tiempo de ejecución: " + (elapsedTime / 1000) + "s");
     System.out.flush();

@@ -18,7 +18,6 @@ public class EtapaValidacion {
         if (noMoreConfirmadas()) {
           try {
             Thread.sleep(random.nextInt(2000, 2500));
-            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

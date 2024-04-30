@@ -31,13 +31,14 @@ public class EtapaReserva {
           registros.registrar_reserva(0, randomAsiento);
           ASIENTOS_LIBRES.incrementAndGet();
         }
-        // Sleep for a while
+        
         try {
-          Thread.sleep(DURACION_ITERACION); // The thread will sleep before attempting the next reservation
+          Thread.sleep(DURACION_ITERACION);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
       }
+
       System.out.println("--------- Thread RESERVA: finished ---------");
       System.out.flush();
     }

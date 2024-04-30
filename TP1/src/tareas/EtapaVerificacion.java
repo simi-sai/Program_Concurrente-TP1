@@ -18,7 +18,6 @@ public class EtapaVerificacion {
         if (noMoreConfirmadas()) {
           try {
             Thread.sleep(random.nextInt(2000, 3000));
-            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -32,7 +31,6 @@ public class EtapaVerificacion {
 
         Asiento randomAsiento = registros.get_reserva(2);
 
-        // Synchronize on the randomAsiento to avoid conflicts with other threads
         synchronized (randomAsiento) {
           if (registros.getChecked(randomAsiento)) {
             if (registros.eliminar_reserva(2, randomAsiento)) {

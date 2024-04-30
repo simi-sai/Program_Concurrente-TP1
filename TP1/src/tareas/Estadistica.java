@@ -19,12 +19,14 @@ public class Estadistica implements Runnable {
       try {
         FileWriter fw = new FileWriter("statistics.txt", true); // Append to the file
         PrintWriter writer = new PrintWriter(fw);
+
         totalPendientes = registros.getPendientes_size();
         totalVerif = registros.getVerificadas_size();
         totalCanceladas = registros.getCanceladas_size();
         totalConfirm = registros.getConfirmadas_size();
         totalReservas = totalVerif + totalCanceladas;
         porcentajeVuelo = (totalVerif * 100) / 186;
+
         System.out.printf(
         "Pending: %d, Confirmed: %d, Verified: %d, Cancelled: %d, Total: %d\n",
         totalPendientes, totalConfirm,
@@ -33,7 +35,7 @@ public class Estadistica implements Runnable {
         writer.printf("Reservations Verified: %d, Cancelled: %d, Total: %d\n",
             totalVerif, totalCanceladas,
             totalReservas);
-        writer.println("------------------"); // Write a line to the file
+        writer.println("------------------");
         writer.flush();
         writer.close(); // Close the writer
       } catch (IOException e) {

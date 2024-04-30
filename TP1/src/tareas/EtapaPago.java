@@ -18,7 +18,6 @@ public class EtapaPago {
         if (noMorePendientes()) {
           try {
             Thread.sleep(random.nextInt(1000, 2000));
-            //Thread.sleep(1000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

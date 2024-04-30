@@ -27,7 +27,7 @@ public class Registros {
         synchronized (reservas_pendientes) {
           while (reservas_pendientes.isEmpty()) {
             try {
-              reservas_pendientes.wait(); // Wait until there is a reservation added
+              reservas_pendientes.wait(); 
             } catch (InterruptedException e) {
               e.printStackTrace();
             }
@@ -39,7 +39,7 @@ public class Registros {
         synchronized (reservas_confirmadas) {
           while (reservas_confirmadas.isEmpty()) {
             try {
-              reservas_confirmadas.wait(); // Wait until there is a reservation added
+              reservas_confirmadas.wait(); 
             } catch (InterruptedException e) {
               e.printStackTrace();
             }
@@ -48,7 +48,6 @@ public class Registros {
           return reservas_confirmadas.get(reservaIndex);
         }
       default:
-        // Handle unexpected tipo values
         System.err.println("Invalid tipo value: " + tipo);
         return null;
     }
@@ -61,7 +60,7 @@ public class Registros {
         synchronized (reservas_pendientes) {
           asiento.setEstado(1);
           reservas_pendientes.add(asiento);
-          reservas_pendientes.notifyAll(); // Notify all threads waiting on this object so they can try get the lock
+          reservas_pendientes.notifyAll();
           return;
         }
       case 1:

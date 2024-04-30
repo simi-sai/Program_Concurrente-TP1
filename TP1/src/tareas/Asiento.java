@@ -13,12 +13,12 @@ public class Asiento {
     this.checked = false;
   }
 
-  public int getEstado() {
-    return estado;
-  }
-
   public void setEstado(int estado) {
     this.estado = estado;
+  }
+
+  public int getEstado() {
+    return estado;
   }
 
   public int getFila() {
@@ -29,11 +29,11 @@ public class Asiento {
     return columna;
   }
 
-  public boolean getChecked() {
-    return checked;
-  }
-
   public void setChecked() {
     this.checked = true;
+  }
+
+  public boolean getChecked() {
+    return checked;
   }
 }

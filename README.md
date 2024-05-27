@@ -1,6 +1,6 @@
-# Progamacion Concurrente - TPs
+# Progamacion Concurrente - TP1
 
-Trabajos Practicos grupales realizados para la materia Programación Concurrente
+Trabajo Practico grupal realizado para la materia Programación Concurrente
 
 ## Grupo: ***Threading Bad***
 - Palacio, Luis Enrique
